@@ -1,0 +1,1860 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#5b5cff" />
+<title>跨境运营费用对账系统 · 让每一笔跨境费用都有据可查</title>
+<style>
+  :root{
+    --brand:#5b5cff; --brand-soft:#e8e9ff; --bg:#fbfbfd; --card:#fff;
+    --text:#1d1d1f; --muted:#86868b; --border:#e8e8ed;
+    --ok:#10b981; --warn:#f59e0b; --bad:#ef4444; --info:#3b82f6;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+    font-size:17px; line-height:1.5; letter-spacing:-0.01em;
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+  a{color:var(--brand);text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:980px;font-weight:500;
+    transition:transform .18s cubic-bezier(.2,.8,.2,1), box-shadow .18s cubic-bezier(.2,.8,.2,1);}
+  button:active{transform:scale(.97);}
+  input,select,textarea{font-family:inherit;padding:12px 16px;border:1px solid var(--border);
+    border-radius:12px;font-size:15px;background:#fff;width:100%;
+    transition:border-color .2s, box-shadow .2s;}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand);
+    box-shadow:0 0 0 4px rgba(91,92,255,.12);}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:500;}
+  h1,h2,h3,h4{letter-spacing:-0.02em; font-weight:700; margin:0;}
+  h1{font-size:clamp(40px, 6vw, 72px); line-height:1.1;}
+  h2{font-size:clamp(28px, 4vw, 40px); line-height:1.15;}
+  h3{font-size:22px; font-weight:600;}
+  h4{font-size:17px; font-weight:600;}
+
+  /* ==== 布局 ==== */
+  .app{max-width:1200px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;}
+  .topbar{background:rgba(255,255,255,.72);backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid var(--border);padding:14px 24px;
+    display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:700;font-size:17px;letter-spacing:-0.01em;}
+  .brand-logo{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#5b5cff,#8a5bff);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:900;
+    box-shadow:0 4px 12px rgba(91,92,255,.3);}
+  .role-switch{display:flex;gap:4px;}
+  .role-btn{padding:7px 16px;font-size:13px;background:transparent;color:var(--muted);border-radius:980px;
+    font-weight:500;}
+  .role-btn:hover{color:var(--text);background:rgba(0,0,0,.04);}
+  .role-btn.active{background:var(--text);color:#fff;}
+  .main{flex:1;padding:32px 24px;max-width:1200px;width:100%;margin:0 auto;}
+
+  /* ==== 卡片 ==== */
+  .card{background:var(--card);border-radius:18px;padding:28px;margin-bottom:20px;
+    box-shadow:0 1px 3px rgba(0,0,0,.04), 0 0 0 1px rgba(0,0,0,.02);
+    transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s cubic-bezier(.2,.8,.2,1);}
+  .card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.02);}
+  .card-title{font-size:22px;font-weight:600;margin:0 0 6px 0;letter-spacing:-0.02em;}
+  .card-sub{font-size:14px;color:var(--muted);margin:0 0 20px 0;}
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+
+  /* ==== 按钮 ==== */
+  .btn{background:var(--brand);color:#fff;padding:12px 24px;font-size:15px;display:inline-flex;
+    align-items:center;gap:6px;border-radius:980px;font-weight:500;letter-spacing:-0.01em;
+    box-shadow:0 1px 2px rgba(91,92,255,.2);}
+  .btn:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 4px 12px rgba(91,92,255,.25);}
+  .btn:active{transform:scale(.98);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+  .btn-ghost{background:transparent;color:var(--brand);border:1px solid var(--brand);box-shadow:none;}
+  .btn-ghost:hover{background:var(--brand-soft);transform:none;box-shadow:none;}
+  .btn-ok{background:var(--ok);color:#fff;padding:8px 16px;font-size:13px;box-shadow:0 1px 2px rgba(16,185,129,.2);}
+  .btn-bad{background:var(--bad);color:#fff;padding:8px 16px;font-size:13px;box-shadow:0 1px 2px rgba(239,68,68,.2);}
+  .btn-sm{padding:8px 16px;font-size:13px;}
+
+  /* ==== 状态徽章 ==== */
+  .badge{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;}
+  .badge-pending{background:#fef3c7;color:#92400e;}
+  .badge-passed{background:#d1fae5;color:#065f46;}
+  .badge-rejected{background:#fee2e2;color:#991b1b;}
+  .badge-draft{background:#e5e7eb;color:#374151;}
+  .badge-warn{background:#fef3c7;color:#92400e;}
+  .badge-mismatch{background:#fee2e2;color:#991b1b;}
+  .badge-compliant{background:#d1fae5;color:#065f46;}
+  .badge-out-of-quota{background:#fee2e2;color:#991b1b;}
+
+  /* ==== 表格 ==== */
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{background:var(--bg);padding:10px;text-align:left;font-weight:600;color:var(--muted);
+    font-size:12px;border-bottom:1px solid var(--border);}
+  td{padding:12px 10px;border-bottom:1px solid var(--border);}
+  tr:hover td{background:#fafafa;}
+
+  /* ==== 表单 ==== */
+  .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+  .form-row{margin-bottom:14px;}
+  .form-actions{display:flex;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);}
+
+  /* ==== AI 提示 ==== */
+  .ai-box{background:linear-gradient(135deg,#f0f4ff,#fef0ff);border:1px solid #d8d8ff;
+    border-radius:10px;padding:14px;margin:12px 0;font-size:13px;}
+  .ai-title{font-weight:700;color:var(--brand);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+  .ai-loading{display:flex;align-items:center;gap:8px;color:var(--brand);}
+  .ai-loading::before{content:"";width:14px;height:14px;border:2px solid var(--brand);
+    border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* ==== Toast ==== */
+  .toast{position:fixed;top:20px;right:20px;background:#111827;color:#fff;padding:12px 20px;
+    border-radius:8px;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:100;
+    animation:slideIn .3s;}
+  .toast.ok{background:var(--ok);}
+  .toast.err{background:var(--bad);}
+  @keyframes slideIn{from{transform:translateX(100%);opacity:0;}to{transform:none;opacity:1;}}
+
+  /* ==== 校验错误 ==== */
+  .err-list{background:#fef2f2;border-left:3px solid var(--bad);padding:12px 14px;
+    border-radius:0 8px 8px 0;margin:10px 0;font-size:13px;}
+  .err-item{padding:4px 0;color:#7f1d1d;}
+  .err-code{display:inline-block;background:var(--bad);color:#fff;font-size:10px;
+    padding:1px 6px;border-radius:3px;margin-right:6px;font-family:monospace;}
+  .warn-list{background:#fffbeb;border-left:3px solid var(--warn);}
+  .warn-list .err-item{color:#78350f;}
+  .warn-list .err-code{background:var(--warn);}
+
+  /* ==== 看板 ==== */
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:20px;}
+  .stat{background:var(--card);padding:24px;border-radius:18px;
+    box-shadow:0 1px 3px rgba(0,0,0,.04), 0 0 0 1px rgba(0,0,0,.02);
+    transition:transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s cubic-bezier(.2,.8,.2,1);}
+  .stat:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.02);}
+  .stat-label{font-size:13px;color:var(--muted);margin-bottom:8px;font-weight:500;}
+  .stat-value{font-size:44px;font-weight:700;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;
+    background:linear-gradient(135deg, #1d1d1f, #4b4b52);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .stat-value.brand-gradient{background:linear-gradient(135deg,#5b5cff,#8a5bff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .stat-delta{font-size:13px;margin-top:6px;font-weight:500;}
+  .stat-delta.up{color:var(--ok);}
+  .stat-delta.down{color:var(--bad);}
+
+  /* ==== 骨架屏 ==== */
+  .skeleton{background:linear-gradient(90deg, #f0f0f2 25%, #e5e5ea 50%, #f0f0f2 75%);
+    background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px;}
+  @keyframes shimmer{to{background-position:-200% 0;}}
+
+  /* ==== 滚动渐入 ==== */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1);}
+  .reveal.visible{opacity:1;transform:none;}
+
+  /* ==== 看板网格 ==== */
+  .dash-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;}
+  .dash-grid > .card{margin-bottom:0;}
+  .col-6{grid-column:span 6;}
+  .col-12{grid-column:span 12;}
+  @media (max-width:900px){ .col-6{grid-column:span 12;} }
+
+  /* ==== 图表通用 ==== */
+  .chart-wrap{display:flex;align-items:center;justify-content:center;padding:8px 0;}
+  .chart-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;font-size:13px;}
+  .legend-item{display:flex;align-items:center;gap:6px;color:var(--muted);}
+  .legend-dot{width:10px;height:10px;border-radius:3px;}
+  .supplier-comparison-wrap{overflow-x:auto;}
+  .supplier-comparison-table{min-width:1000px;}
+  .supplier-month-cell{min-width:112px;}
+  .supplier-month-track{height:4px;background:#f0f0f2;border-radius:4px;overflow:hidden;margin-top:5px;}
+  .supplier-month-fill{height:100%;border-radius:4px;}
+
+  /* ==== 环形进度 ==== */
+  .ring-label{font-size:32px;font-weight:700;letter-spacing:-0.02em;}
+  .ring-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+
+  /* ==== 漏斗 ==== */
+  .funnel-row{display:flex;align-items:center;gap:12px;padding:8px 0;}
+  .funnel-label{width:88px;font-size:13px;color:var(--muted);text-align:right;flex-shrink:0;}
+  .funnel-bar{height:26px;border-radius:6px;display:flex;align-items:center;
+    padding:0 10px;color:#fff;font-size:12px;font-weight:600;
+    transition:width 1s cubic-bezier(.2,.8,.2,1) .1s;min-width:32px;}
+
+  /* ==== 饼图 ==== */
+  .pie-seg{transition:opacity .2s, transform .2s;cursor:pointer;transform-origin:center;}
+  .pie-seg:hover{opacity:.85;transform:scale(1.04);}
+
+  /* ==== 雷达图 ==== */
+  .radar-axis{stroke:var(--border);stroke-width:1;}
+  .radar-grid{fill:none;stroke:var(--border);stroke-width:1;}
+  .radar-shape{fill:rgba(91,92,255,.25);stroke:var(--brand);stroke-width:2;}
+  .radar-dot{fill:var(--brand);}
+  .radar-label{font-size:11px;fill:var(--muted);}
+
+  /* ==== 异常时间线 ==== */
+  .anomaly-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+  .anomaly-item:last-child{border-bottom:none;}
+  .anomaly-dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+  .anomaly-dot.high{background:var(--bad);box-shadow:0 0 0 3px rgba(239,68,68,.15);}
+  .anomaly-dot.mid{background:var(--warn);box-shadow:0 0 0 3px rgba(245,158,11,.15);}
+  .anomaly-time{font-size:11px;color:var(--muted);font-family:'SF Mono',Monaco,monospace;flex-shrink:0;width:60px;}
+  .anomaly-text{flex:1;font-size:13px;}
+  .anomaly-code{font-family:monospace;font-size:11px;color:var(--brand);font-weight:600;}
+
+  /* ==== 月份切换器 ==== */
+  .month-switcher{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:20px;
+    background:var(--card);padding:8px;border-radius:980px;width:fit-content;
+    box-shadow:0 1px 3px rgba(0,0,0,.04), 0 0 0 1px rgba(0,0,0,.02);}
+  .month-switcher-label{font-size:13px;color:var(--muted);padding:0 10px;font-weight:500;}
+  .month-pill{padding:8px 18px;border-radius:980px;font-size:14px;font-weight:500;
+    background:transparent;color:var(--muted);cursor:pointer;border:none;
+    transition:all .2s cubic-bezier(.2,.8,.2,1);}
+  .month-pill:hover{color:var(--text);background:rgba(0,0,0,.04);}
+  .month-pill.active{background:var(--text);color:#fff;font-weight:600;
+    box-shadow:0 2px 8px rgba(0,0,0,.12);}
+  .month-pill .dot{display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:var(--brand);margin-right:6px;vertical-align:middle;opacity:0;transition:opacity .2s;}
+  .month-pill.active .dot{opacity:1;background:#fff;}
+
+  /* ==== 登录 ==== */
+  .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(180deg,#fbfbfd 0%,#f5f5f7 100%);padding:40px 20px;}
+  .login-card{background:#fff;padding:56px 48px;border-radius:28px;
+    box-shadow:0 20px 60px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.02);
+    max-width:480px;width:100%;
+    animation:heroIn .8s cubic-bezier(.2,.8,.2,1);}
+  @keyframes heroIn{from{opacity:0;transform:translateY(30px) scale(.98);}to{opacity:1;transform:none;}}
+  .login-title{font-size:44px;font-weight:700;margin:0 0 12px 0;letter-spacing:-0.03em;line-height:1.1;}
+  .login-sub{color:var(--muted);font-size:17px;margin:0 0 32px 0;line-height:1.5;}
+
+  /* ==== Tab ==== */
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:24px;}
+  .tab{padding:12px 20px;background:transparent;color:var(--muted);border-radius:12px 12px 0 0;
+    font-size:15px;font-weight:500;border-bottom:2px solid transparent;letter-spacing:-0.01em;
+    transition:color .2s, background .2s;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--text);border-bottom-color:var(--brand);background:transparent;font-weight:600;}
+
+  /* ==== 凭证缩略图 ==== */
+  .ev-thumb{width:48px;height:48px;border-radius:6px;object-fit:cover;background:var(--bg);
+    display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);
+    border:1px dashed var(--border);margin-right:4px;cursor:pointer;}
+  .ev-thumb:hover{border-color:var(--brand);color:var(--brand);}
+
+  /* ==== 时间线 ==== */
+  .timeline{position:relative;padding-left:24px;}
+  .timeline::before{content:"";position:absolute;left:8px;top:4px;bottom:4px;width:2px;background:var(--border);}
+  .tl-item{position:relative;padding-bottom:16px;}
+  .tl-item::before{content:"";position:absolute;left:-19px;top:4px;width:10px;height:10px;
+    border-radius:50%;background:var(--brand);border:2px solid #fff;box-shadow:0 0 0 2px var(--brand-soft);}
+  .tl-item.done::before{background:var(--ok);box-shadow:0 0 0 2px #d1fae5;}
+  .tl-time{font-size:11px;color:var(--muted);}
+  .tl-title{font-weight:600;font-size:13px;margin:2px 0;}
+  .tl-desc{font-size:12px;color:var(--muted);}
+
+  .muted{color:var(--muted);font-size:12px;}
+  .divider{height:1px;background:var(--border);margin:14px 0;}
+  .mono{font-family:"SF Mono",Monaco,monospace;font-size:12px;}
+  .text-ok{color:var(--ok);} .text-warn{color:var(--warn);} .text-bad{color:var(--bad);}
+
+  /* ==== 右下角手写签名 ==== */
+  .signature{
+    position:fixed;bottom:20px;right:24px;z-index:9998;
+    font-family:'Caveat','Segoe Script','Brush Script MT','Lucida Handwriting',cursive;
+    font-size:32px;font-weight:600;color:rgba(91,92,255,.55);
+    pointer-events:none;user-select:none;
+    transform:rotate(-6deg);
+    text-shadow:0 1px 2px rgba(255,255,255,.8);
+    letter-spacing:1px;
+    transition:opacity .3s, transform .3s;
+  }
+  .signature:hover{opacity:.85;transform:rotate(-6deg) scale(1.05);}
+
+  /* ==== 移动端 ==== */
+  @media (max-width:768px){
+    .main{padding:12px;}
+    .card{padding:14px;}
+    .topbar{padding:10px 12px;}
+    .role-switch{gap:2px;}
+    .role-btn{padding:5px 10px;font-size:12px;}
+    table{font-size:12px;}
+    td,th{padding:8px 6px;}
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ============================================================
+   HCT 对账系统 · 单文件演示版
+   数据存 localStorage，刷新不丢
+============================================================ */
+
+// ============ 种子数据 ============
+const SEED = {
+  project: { id: 1, name: 'HCT数采项目-欧洲区', region: 'EU', budgetTotal: 500000, currency: 'CNY' },
+  supplier: { id: 1, name: '供应商A', code: 'SUP-A', currency: 'CNY' },
+  vehicles: [
+    { id: 1, code: '北欧#1', vin: 'WBA8E9C51KB123456', plate: 'ABC-123', region: 'EU' },
+    { id: 2, code: '西欧#9', vin: 'WBA8E9C52KB123457', plate: 'DEF-456', region: 'EU' },
+    { id: 3, code: '功能7#', vin: 'WBA8E9C53KB123458', plate: 'GHI-789', region: 'EU' },
+  ],
+  drivers: [
+    { id: 1, name: '张三', vehicleId: 3 },
+    { id: 2, name: '李四', vehicleId: 3 },
+    { id: 3, name: '王五', vehicleId: 3 },
+    { id: 4, name: '赵六', vehicleId: 1 },
+    { id: 5, name: '钱七', vehicleId: 2 },
+    { id: 6, name: '孙八', vehicleId: 3 },
+  ],
+  quotations: [
+    { id: 1, item: '驾驶员工资&补贴&住宿', unitPrice: 2650,  unit: '元/人/月', category: 'FIXED' },
+    { id: 2, item: '驾驶员加班工资',       unitPrice: 330,   unit: '元/小时',  category: 'FIXED' },
+    { id: 3, item: '周日加班',             unitPrice: 3240,  unit: '元/天',    category: 'FIXED' },
+    { id: 4, item: '人员保险',             unitPrice: 4000,  unit: '元/人/半年', category: 'FIXED' },
+    { id: 5, item: '运营管理费',           unitPrice: 13800, unit: '元/人/月', category: 'FIXED' },
+    { id: 6, item: 'GDPR合规费用',         unitPrice: 30000, unit: '元/车',    category: 'FIXED' },
+    { id: 7, item: '车辆保险费',           unitPrice: 2000,  unit: '元/车',    category: 'FIXED' },
+    { id: 8, item: '车辆测试牌照费',       unitPrice: 3000,  unit: '元/车',    category: 'FIXED' },
+  ],
+  // 司机打卡（含 2 个未打卡 + 缺照片）
+  attendances: [
+    { id: 1, driverId: 1, vehicleId: 3, date: '2026-07-15', start: '09:00', end: '18:30', photoIn: 'data:,打卡照', photoOut: 'data:,打卡照', hctConfirm: 'CONFIRMED' },
+    { id: 2, driverId: 1, vehicleId: 3, date: '2026-07-21', start: '09:00', end: '18:00', photoIn: null, photoOut: null, noClockReason: null, hctConfirm: 'PENDING' },
+    { id: 3, driverId: 2, vehicleId: 3, date: '2026-07-22', start: '09:00', end: '18:00', photoIn: null, photoOut: null, noClockReason: null, hctConfirm: 'PENDING' },
+    { id: 4, driverId: 3, vehicleId: 3, date: '2026-07-15', start: '08:55', end: '18:05', photoIn: 'data:,打卡照', photoOut: 'data:,打卡照', hctConfirm: 'CONFIRMED' },
+    { id: 5, driverId: 4, vehicleId: 1, date: '2026-07-15', start: '09:10', end: '18:00', photoIn: 'data:,打卡照', photoOut: 'data:,打卡照', hctConfirm: 'PENDING' },
+  ],
+  // 费用明细 —— 故意按 PRD 里的真实问题埋雷
+  expenses: [
+    // 报价单内、合规
+    { id: 1, category: 'FIXED', subCategory: '驾驶员工资&补贴&住宿', qty: 5, unitPrice: 2650, actualAmount: 13250, currency: 'CNY', exchangeRate: 1, expenseDate: '2026-07-31', vehicleId: 3, inQuotation: true, evidences: ['INVOICE'], status: 'pending', complianceStatus: 'COMPLIANT' },
+    // GDPR 大额 15w 缺发票
+    { id: 2, category: 'FIXED', subCategory: 'GDPR合规费用', qty: 5, unitPrice: 30000, actualAmount: 150000, currency: 'CNY', exchangeRate: 1, expenseDate: '2026-07-31', vehicleId: 3, inQuotation: true, evidences: [], status: 'pending', complianceStatus: 'COMPLIANT' },
+    // 充电费 —— 缺实物图/背景/HCT验收/报备
+    { id: 3, category: 'VEHICLE_OPS', subCategory: 'CHARGING', foreignAmount: 380.5, currency: 'EUR', exchangeRate: 8.05, actualAmount: 3063.03, expenseDate: '2026-07-15', vehicleId: 3, inQuotation: true, evidences: ['INVOICE'], backgroundDesc: null, hctApprover: null, status: 'pending', complianceStatus: 'COMPLIANT' },
+    // 报价单外 —— 啥都没有
+    { id: 4, category: 'PROCUREMENT', subCategory: '工具采购', foreignAmount: 120, currency: 'EUR', exchangeRate: 8.05, actualAmount: 966, expenseDate: '2026-07-18', vehicleId: 1, inQuotation: false, evidences: [], backgroundDesc: null, hctApprover: null, status: 'pending', complianceStatus: 'OUT_OF_QUOTA' },
+    // 跨区域混入（UK 费用混进 EU 项目）
+    { id: 5, category: 'VEHICLE_OPS', subCategory: 'PARKING', foreignAmount: 12.98, currency: 'GBP', exchangeRate: 9.30, actualAmount: 120.71, expenseDate: '2026-04-12', vehicleId: 2, inQuotation: true, evidences: ['INVOICE'], backgroundDesc: null, hctApprover: null, status: 'pending', complianceStatus: 'COMPLIANT', _region: 'UK' },
+    // 汇率偏离
+    { id: 6, category: 'VEHICLE_OPS', subCategory: 'TOLL', foreignAmount: 100, currency: 'EUR', exchangeRate: 9.50, actualAmount: 950, expenseDate: '2026-07-10', vehicleId: 1, inQuotation: true, evidences: ['INVOICE'], backgroundDesc: '德国高速', hctApprover: '张工', status: 'pending', complianceStatus: 'COMPLIANT' },
+  ],
+  prs: [],
+  settlements: [],
+  aiPrompts: [
+    { code: 'expense_invoice_extract', name: '报销发票识别', model: 'doubao-vision-pro-32k', enabled: true, toleranceMinutes: 0,
+      systemPrompt: '你是发票识别助手，只返回 JSON。',
+      userPromptTemplate: '识别发票：区域 {{area}} / 类型 {{expenseType}} / 币种 {{currencyOptions}}。返回 {invoiceNo, invoiceDate, amount, currency}。' },
+    { code: 'clock_photo_extract', name: '打卡照片时间识别', model: 'doubao-vision-pro-32k', enabled: true, toleranceMinutes: 10,
+      systemPrompt: '你是打卡照片时间识别助手，只返回 JSON。',
+      userPromptTemplate: '识别打卡照时间：{{photoType}} / {{workDate}} / 登记 {{registerTime}} / 城市 {{city}}。返回 {recognizedTime, confidence}。' },
+  ],
+};
+
+// ============ Store ============
+const LS_KEY = 'hct_demo_v1';
+let DB = JSON.parse(localStorage.getItem(LS_KEY) || 'null') || JSON.parse(JSON.stringify(SEED));
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(DB)); }
+function reset(){ localStorage.removeItem(LS_KEY); DB = JSON.parse(JSON.stringify(SEED)); save(); render(); }
+
+// ============ 汇率（模拟市场价） ============
+const MARKET_FX = { CNY: 1, EUR: 8.05, USD: 7.20, GBP: 9.30, HUF: 0.020 };
+
+// ============ 当前用户 ============
+const previewRole = new URLSearchParams(window.location.search).get('preview');
+let currentRole = previewRole === 'admin' ? 'admin' : (localStorage.getItem('hct_role') || null);  // driver / supplier / admin
+let currentUser = JSON.parse(localStorage.getItem('hct_user') || 'null');
+
+// ============ 工具 ============
+const fmtMoney = n => (n == null ? '-' : Number(n).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+
+// 数字滚动动画（苹果式 count-up）
+function animateCount(el, target, prefix = '', suffix = '', decimals = 0) {
+  const duration = 1200, start = performance.now();
+  const tick = now => {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    const val = target * eased;
+    el.textContent = prefix + (decimals ? val.toFixed(decimals) : Math.round(val).toLocaleString()) + suffix;
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+// 滚动渐入观察器
+const revealIO = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealIO.unobserve(e.target); } });
+}, { threshold: 0.08 });
+function observeReveals() { document.querySelectorAll('.reveal:not(.visible)').forEach(el => revealIO.observe(el)); }
+const badge = s => {
+  const m = { pending:['待审核','badge-pending'], passed:['已通过','badge-passed'],
+              rejected:['已驳回','badge-rejected'], draft:['草稿','badge-draft'] };
+  const [t, c] = m[s] || [s, 'badge-draft'];
+  return `<span class="badge ${c}">${t}</span>`;
+};
+const complianceBadge = s => {
+  const m = { COMPLIANT:['✅ 合规','badge-compliant'], MISMATCH:['⚠️ 差异','badge-mismatch'],
+              OUT_OF_QUOTA:['❌ 报价外','badge-out-of-quota'] };
+  const [t, c] = m[s] || ['⏳', 'badge-pending'];
+  return `<span class="badge ${c}">${t}</span>`;
+};
+const toast = (msg, type='ok') => {
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2400);
+};
+
+// ============================================================
+// 15 条校验规则（精简版）
+// ============================================================
+const Rules = {
+  V001: { level: 'BLOCK', name: 'PR 基本信息完整性', check: ctx =>
+    !ctx.pr.projectId || !ctx.pr.supplierId || !ctx.pr.settlementMonth ? 'PR 基本信息不完整' : null },
+
+  V002: { level: 'BLOCK', name: '结算月份正确性', check: ctx => {
+    const bad = ctx.expenses.filter(e => !e.expenseDate.startsWith(ctx.pr.settlementMonth));
+    return bad.length ? `${bad.length} 笔费用日期不在结算月份 ${ctx.pr.settlementMonth} 内` : null;
+  }},
+
+  V003: { level: 'BLOCK', name: '车辆信息完整性', check: ctx => {
+    const bad = ctx.expenses.filter(e => !e.vehicleId);
+    return bad.length ? `${bad.length} 笔费用未关联车辆` : null;
+  }},
+
+  V004: { level: 'BLOCK', name: '工时确认完整性', check: ctx => {
+    const pending = ctx.attendances.filter(a => a.hctConfirm === 'PENDING');
+    return pending.length ? `${pending.length} 条考勤未经 HCT 确认` : null;
+  }},
+
+  V005: { level: 'BLOCK', name: '打卡照片规则', check: ctx => {
+    const bad = ctx.attendances.filter(a =>
+      (!a.photoIn || !a.photoOut) && (!a.noClockReason || a.hctConfirm !== 'CONFIRMED'));
+    return bad.length ? `${bad.length} 条未打卡记录缺少原因或 HCT 确认` : null;
+  }},
+
+  V006: { level: 'BLOCK', name: '报价单内费用凭证', check: ctx => {
+    const bad = ctx.expenses.filter(e => e.inQuotation && !e.evidences.includes('INVOICE'));
+    return bad.length ? `${bad.length} 笔报价单内费用缺少发票` : null;
+  }},
+
+  V007: { level: 'BLOCK', name: '报价单外费用凭证（5件套）', check: ctx => {
+    const bad = ctx.expenses.filter(e => !e.inQuotation).filter(e =>
+      !e.evidences.includes('INVOICE') ||
+      !e.evidences.includes('OBJECT_PHOTO') ||
+      !e.backgroundDesc || !e.hctApprover ||
+      !e.evidences.includes('REPORT_SCREENSHOT'));
+    return bad.length ? `${bad.length} 笔报价单外费用凭证不完整（需发票+实物图+背景+HCT验收+报备）` : null;
+  }},
+
+  V008: { level: 'BLOCK', name: '充电/停车/高速凭证（5件套）', check: ctx => {
+    const bad = ctx.expenses.filter(e => ['CHARGING','PARKING','TOLL'].includes(e.subCategory)).filter(e =>
+      !e.evidences.includes('INVOICE') || !e.evidences.includes('OBJECT_PHOTO') ||
+      !e.backgroundDesc || !e.hctApprover || !e.evidences.includes('REPORT_SCREENSHOT'));
+    return bad.length ? `${bad.length} 笔充电/停车/高速费用凭证不完整` : null;
+  }},
+
+  V009: { level: 'BLOCK', name: '代采购凭证（5件套）', check: ctx => {
+    const bad = ctx.expenses.filter(e => e.category === 'PROCUREMENT').filter(e =>
+      !e.evidences.includes('INVOICE') || !e.evidences.includes('OBJECT_PHOTO') ||
+      !e.backgroundDesc || !e.hctApprover || !e.evidences.includes('REPORT_SCREENSHOT'));
+    return bad.length ? `${bad.length} 笔代采购费用凭证不完整` : null;
+  }},
+
+  V010: { level: 'BLOCK', name: '大额费用必须发票', check: ctx => {
+    const bad = ctx.expenses.filter(e => e.actualAmount >= 50000 && !e.evidences.includes('INVOICE'));
+    return bad.length ? `${bad.length} 笔大额费用（≥5万）缺少发票` : null;
+  }},
+
+  V011: { level: 'BLOCK', name: '金额计算正确性', check: ctx => {
+    const bad = ctx.expenses.filter(e => {
+      if (e.unitPrice == null || e.qty == null) return false;
+      return Math.abs(e.unitPrice * e.qty - e.actualAmount) > 0.01;
+    });
+    return bad.length ? `${bad.length} 笔费用 单价×数量 ≠ 总价` : null;
+  }},
+
+  V012: { level: 'WARN', name: '汇率合理性 ±10%', check: ctx => {
+    const bad = ctx.expenses.filter(e => e.currency !== 'CNY').filter(e => {
+      const m = MARKET_FX[e.currency]; if (!m) return false;
+      return Math.abs(e.exchangeRate - m) / m > 0.10;
+    });
+    return bad.length ? `${bad.length} 笔汇率偏离市场汇率超过 10%` : null;
+  }},
+
+  V013: { level: 'WARN', name: '费用归属月份', check: ctx => {
+    const bad = ctx.expenses.filter(e => !e.expenseDate.startsWith(ctx.pr.settlementMonth));
+    return bad.length ? `${bad.length} 笔费用日期不在 ${ctx.pr.settlementMonth}` : null;
+  }},
+
+  V014: { level: 'WARN', name: '跨区域费用检测', check: ctx => {
+    const bad = ctx.expenses.filter(e => e._region && e._region !== 'EU');
+    return bad.length ? `${bad.length} 笔非本区域费用混入` : null;
+  }},
+
+  V015: { level: 'WARN', name: '数据回传记录', check: ctx => {
+    const bad = ctx.expenses.filter(e => e.category === 'DATA_TRANSFER' && !e.dataTransferRecord);
+    return bad.length ? `${bad.length} 笔数据回传费用缺记录` : null;
+  }},
+};
+
+function runAllRules(ctx) {
+  const errors = [];
+  for (const [code, rule] of Object.entries(Rules)) {
+    const msg = rule.check(ctx);
+    if (msg) errors.push({ code, level: rule.level, name: rule.name, message: msg });
+  }
+  return errors;
+}
+
+// ============================================================
+// 模拟 AI 识别（真实情况调豆包 API）
+// ============================================================
+async function aiExtractInvoice(file) {
+  return new Promise(res => setTimeout(() => res({
+    invoiceNo: 'INV-' + Math.random().toString(36).slice(2, 10).toUpperCase(),
+    invoiceDate: '2026-07-' + String(10 + Math.floor(Math.random() * 15)).padStart(2, '0'),
+    amount: +(100 + Math.random() * 400).toFixed(2),
+    currency: ['EUR', 'EUR', 'EUR', 'USD'][Math.floor(Math.random() * 4)],
+    confidence: 0.92 + Math.random() * 0.07,
+  }), 1200));
+}
+
+async function aiExtractClockTime(registerTime) {
+  return new Promise(res => setTimeout(() => {
+    const [h, m] = registerTime.split(':').map(Number);
+    const drift = Math.floor(Math.random() * 25) - 12;  // -12 ~ +12 分钟漂移
+    const total = h * 60 + m + drift;
+    const hh = String(Math.floor(total / 60)).padStart(2, '0');
+    const mm = String(total % 60).padStart(2, '0');
+    res({
+      recognizedTime: `${hh}:${mm}`,
+      confidence: 0.88 + Math.random() * 0.1,
+      diffMinutes: Math.abs(drift),
+      withinTolerance: Math.abs(drift) <= 10,
+    });
+  }, 900));
+}
+
+// ============================================================
+// 视图渲染
+// ============================================================
+const app = document.getElementById('app');
+
+function render() {
+  if (!currentRole) return renderLoginSelect();
+  const views = {
+    driver:   renderDriver,
+    supplier: renderSupplier,
+    admin:    renderAdmin,
+  };
+  (views[currentRole] || renderLoginSelect)();
+}
+
+function header(subtitle) {
+  return `
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-logo">对</div>
+      <div>
+        <div>跨境运营费用对账系统</div>
+        <div class="muted" style="font-weight:400;font-size:11px;">${subtitle}</div>
+      </div>
+    </div>
+    <div class="role-switch">
+      <button class="role-btn ${currentRole==='driver'?'active':''}"   onclick="switchRole('driver')">司机端</button>
+      <button class="role-btn ${currentRole==='supplier'?'active':''}" onclick="switchRole('supplier')">供应商端</button>
+      <button class="role-btn ${currentRole==='admin'?'active':''}"    onclick="switchRole('admin')">管理端</button>
+      <button class="role-btn" onclick="reset()" title="重置演示数据">🔄</button>
+    </div>
+  </div>`;
+}
+
+function switchRole(r) {
+  currentRole = r;
+  localStorage.setItem('hct_role', r);
+  render();
+}
+
+// ============ 登录选择 ============
+function renderLoginSelect() {
+  app.innerHTML = `
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="brand" style="justify-content:center;margin-bottom:20px;">
+        <div class="brand-logo" style="width:48px;height:48px;font-size:22px;">对</div>
+      </div>
+      <h1 class="login-title" style="text-align:center;">跨境运营费用对账系统</h1>
+      <p class="login-sub" style="text-align:center;">
+        <span style="color:var(--brand);font-weight:600;">让每一笔跨境费用都有据可查</span><br/>
+        <span style="font-size:12px;color:var(--muted);">本地演示版 · 数据存于浏览器</span>
+      </p>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <button class="btn" style="justify-content:center;padding:14px 24px;font-size:16px;" onclick="switchRole('driver')">📱 我是司机</button>
+        <button class="btn btn-ghost" style="justify-content:center;padding:14px 24px;font-size:16px;" onclick="switchRole('supplier')">📦 我是供应商</button>
+        <button class="btn" style="background:#1d1d1f;justify-content:center;padding:14px 24px;font-size:16px;" onclick="switchRole('admin')">🏢 我是总部审核</button>
+      </div>
+      <div class="divider"></div>
+      <p class="muted" style="font-size:12px;text-align:center;margin:0;">
+        内置数据：6 司机 / 3 车辆 / 8 报价项 / 6 笔费用 / 5 条打卡<br/>
+        覆盖典型业务问题（缺凭证 / 跨区混入 / 汇率异常 / 未打卡）
+      </p>
+    </div>
+  </div>`;
+}
+
+// ============================================================
+// 司机端
+// ============================================================
+let driverTab = 'clockin';
+
+function renderDriver() {
+  app.innerHTML = `
+  <div class="app">
+    ${header('司机端 · ' + DB.drivers[0].name)}
+    <div class="main">
+      <div class="tabs">
+        <button class="tab ${driverTab==='clockin'?'active':''}"  onclick="driverTab='clockin';render()">📍 打卡</button>
+        <button class="tab ${driverTab==='expense'?'active':''}"  onclick="driverTab='expense';render()">💰 报销</button>
+        <button class="tab ${driverTab==='records'?'active':''}"  onclick="driverTab='records';render()">📋 我的记录</button>
+      </div>
+      <div id="driver-content"></div>
+    </div>
+  </div>`;
+  if (driverTab === 'clockin') renderDriverClockIn();
+  else if (driverTab === 'expense') renderDriverExpense();
+  else renderDriverRecords();
+}
+
+function renderDriverClockIn() {
+  const el = document.getElementById('driver-content');
+  el.innerHTML = `
+  <div class="card">
+    <h3 class="card-title">今日打卡</h3>
+    <p class="card-sub">带时间水印的现场照片，AI 自动识别时间</p>
+    <div class="form-grid">
+      <div class="form-row"><label>工作日期</label><input type="date" id="workDate" value="2026-07-15"></div>
+      <div class="form-row"><label>上班时间</label><input type="time" id="startTime" value="09:00"></div>
+      <div class="form-row"><label>下班时间</label><input type="time" id="endTime" value="18:00"></div>
+      <div class="form-row"><label>车辆</label>
+        <select id="vehicleId">${DB.vehicles.map(v => `<option value="${v.id}">${v.code}</option>`).join('')}</select>
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="form-row"><label>上班打卡照（模拟拍照）</label>
+        <input type="file" id="photoIn" accept="image/*">
+      </div>
+      <div class="form-row"><label>下班打卡照</label>
+        <input type="file" id="photoOut" accept="image/*">
+      </div>
+    </div>
+    <div id="ai-result"></div>
+    <div class="form-actions">
+      <button class="btn" onclick="submitClockIn()">提交打卡</button>
+      <button class="btn btn-ghost" onclick="simulateNoClockReason()">我没打卡，填原因</button>
+    </div>
+  </div>`;
+}
+
+async function submitClockIn() {
+  const startTime = document.getElementById('startTime').value;
+  const resultEl = document.getElementById('ai-result');
+  resultEl.innerHTML = `
+  <div class="ai-box">
+    <div class="ai-title">🤖 AI 正在识别打卡照片</div>
+    <div class="skeleton" style="height:14px;width:50%;margin:6px 0;"></div>
+    <div class="skeleton" style="height:14px;width:70%;margin:6px 0;"></div>
+  </div>`;
+
+  const ai = await aiExtractClockTime(startTime);
+  const statusIcon = ai.withinTolerance ? '✅' : '⚠️';
+  const statusColor = ai.withinTolerance ? 'text-ok' : 'text-warn';
+
+  resultEl.innerHTML = `
+  <div class="ai-box">
+    <div class="ai-title">🤖 AI 识别结果</div>
+    <div>识别时间：<b>${ai.recognizedTime}</b>（登记 ${startTime}）</div>
+    <div>置信度：${(ai.confidence * 100).toFixed(1)}%</div>
+    <div class="${statusColor}">${statusIcon} ${ai.withinTolerance ? '在容差内 (±10分钟)' : `超差 ${ai.diffMinutes} 分钟，已标记异常`}</div>
+  </div>`;
+
+  DB.attendances.push({
+    id: Date.now(), driverId: 1, vehicleId: +document.getElementById('vehicleId').value,
+    date: document.getElementById('workDate').value,
+    start: startTime, end: document.getElementById('endTime').value,
+    photoIn: 'data:,demo', photoOut: 'data:,demo',
+    aiResult: ai, hctConfirm: 'PENDING',
+  });
+  save();
+  toast('打卡已提交，等待 HCT 现场确认');
+}
+
+function simulateNoClockReason() {
+  const reason = prompt('请填写未打卡原因：');
+  if (!reason) return;
+  DB.attendances.push({
+    id: Date.now(), driverId: 1, vehicleId: 3,
+    date: new Date().toISOString().slice(0, 10),
+    start: '09:00', end: '18:00',
+    photoIn: null, photoOut: null, noClockReason: reason, hctConfirm: 'PENDING',
+  });
+  save();
+  toast('已提交未打卡说明，待 HCT 现场确认');
+  render();
+}
+
+function renderDriverExpense() {
+  const el = document.getElementById('driver-content');
+  el.innerHTML = `
+  <div class="card">
+    <h3 class="card-title">提交报销</h3>
+    <p class="card-sub">发票拍照 → AI 自动提取金额币种 → 与你填的对比</p>
+    <div class="form-grid">
+      <div class="form-row"><label>费用类型</label>
+        <select id="sub">
+          <option value="CHARGING">充电费</option><option value="PARKING">停车费</option>
+          <option value="TOLL">高速费</option><option value="PROCUREMENT">代采购</option>
+        </select>
+      </div>
+      <div class="form-row"><label>费用日期</label><input type="date" id="expDate" value="2026-07-15"></div>
+      <div class="form-row"><label>外币金额</label><input type="number" id="amount" step="0.01" placeholder="45.50"></div>
+      <div class="form-row"><label>币种</label>
+        <select id="currency"><option>EUR</option><option>USD</option><option>HUF</option><option>CNY</option></select>
+      </div>
+      <div class="form-row"><label>关联车辆</label>
+        <select id="veh">${DB.vehicles.map(v => `<option value="${v.id}">${v.code}</option>`).join('')}</select>
+      </div>
+      <div class="form-row"><label>发票/凭证</label><input type="file" id="inv"></div>
+    </div>
+    <div class="form-row"><label>背景说明</label><textarea id="bg" rows="2" placeholder="如：北欧#1 在布达佩斯运营期间充电"></textarea></div>
+    <div id="ai-result"></div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="analyzeInvoice()">🤖 AI 识别发票</button>
+      <button class="btn" onclick="submitExpense()">提交报销</button>
+    </div>
+  </div>`;
+}
+
+let currentAiResult = null;
+
+async function analyzeInvoice() {
+  const file = document.getElementById('inv').files[0];
+  if (!file) return toast('请先选择发票', 'err');
+  const el = document.getElementById('ai-result');
+  el.innerHTML = `
+  <div class="ai-box">
+    <div class="ai-title">🤖 AI 正在识别发票</div>
+    <div class="skeleton" style="height:14px;width:60%;margin:6px 0;"></div>
+    <div class="skeleton" style="height:14px;width:80%;margin:6px 0;"></div>
+    <div class="skeleton" style="height:14px;width:45%;margin:6px 0;"></div>
+  </div>`;
+
+  currentAiResult = await aiExtractInvoice(file);
+  const myAmount = +document.getElementById('amount').value || 0;
+  const diff = Math.abs(currentAiResult.amount - myAmount);
+  const match = diff < 0.01 && currentAiResult.currency === document.getElementById('currency').value;
+
+  el.innerHTML = `
+  <div class="ai-box">
+    <div class="ai-title">🤖 AI 识别结果</div>
+    <div class="mono">发票号：${currentAiResult.invoiceNo}</div>
+    <div class="mono">日期：${currentAiResult.invoiceDate}</div>
+    <div class="mono">金额：${currentAiResult.amount} ${currentAiResult.currency}（置信度 ${(currentAiResult.confidence*100).toFixed(1)}%）</div>
+    <div class="${match ? 'text-ok' : 'text-bad'}">
+      ${match ? '✅ 与登记信息一致' : `⚠️ 与你填的 ${myAmount} ${document.getElementById('currency').value} 不一致，请核对`}
+    </div>
+  </div>`;
+}
+
+function submitExpense() {
+  const amount = +document.getElementById('amount').value;
+  if (!amount) return toast('请填写金额', 'err');
+  const cur = document.getElementById('currency').value;
+  const fx = MARKET_FX[cur] || 1;
+  DB.expenses.push({
+    id: Date.now(), category: 'VEHICLE_OPS',
+    subCategory: document.getElementById('sub').value,
+    foreignAmount: amount, currency: cur, exchangeRate: fx,
+    actualAmount: amount * fx,
+    expenseDate: document.getElementById('expDate').value,
+    vehicleId: +document.getElementById('veh').value,
+    backgroundDesc: document.getElementById('bg').value,
+    inQuotation: true,
+    evidences: currentAiResult ? ['INVOICE'] : [],
+    status: 'pending', complianceStatus: 'COMPLIANT',
+    aiExtracted: currentAiResult,
+  });
+  save();
+  toast('报销已提交');
+  renderDriverRecords(); driverTab = 'records'; render();
+}
+
+function renderDriverRecords() {
+  const el = document.getElementById('driver-content');
+  const myAttend = DB.attendances.filter(a => a.driverId === 1);
+  const myExpense = DB.expenses.filter(e => e.id > 100);  // 本次新增
+  el.innerHTML = `
+  <div class="card">
+    <h3 class="card-title">我的打卡</h3>
+    <table><thead><tr><th>日期</th><th>时间</th><th>照片</th><th>AI 校验</th><th>HCT 确认</th></tr></thead>
+    <tbody>${myAttend.map(a => `
+      <tr>
+        <td>${a.date}</td>
+        <td class="mono">${a.start} - ${a.end}</td>
+        <td>${a.photoIn ? '📷' : '❌'}</td>
+        <td>${a.aiResult ? (a.aiResult.withinTolerance ? '✅' : '⚠️ ' + a.aiResult.diffMinutes + 'min') : '-'}</td>
+        <td>${a.hctConfirm === 'CONFIRMED' ? '<span class="badge badge-passed">已确认</span>' : '<span class="badge badge-pending">待确认</span>'}</td>
+      </tr>`).join('')}</tbody></table>
+  </div>
+  <div class="card">
+    <h3 class="card-title">我的报销</h3>
+    <table><thead><tr><th>类型</th><th>金额</th><th>人民币</th><th>状态</th></tr></thead>
+    <tbody>${myExpense.map(e => `
+      <tr>
+        <td>${e.subCategory}</td>
+        <td class="mono">${e.foreignAmount} ${e.currency}</td>
+        <td class="mono">¥${fmtMoney(e.actualAmount)}</td>
+        <td>${badge(e.status)}</td>
+      </tr>`).join('') || '<tr><td colspan="4" class="muted">暂无</td></tr>'}
+    </tbody></table>
+  </div>`;
+}
+
+// ============================================================
+// 供应商端
+// ============================================================
+let supplierTab = 'pr';
+
+function renderSupplier() {
+  app.innerHTML = `
+  <div class="app">
+    ${header('供应商端 · ' + DB.supplier.name)}
+    <div class="main">
+      <div class="tabs">
+        <button class="tab ${supplierTab==='pr'?'active':''}"       onclick="supplierTab='pr';render()">📝 创建 PR</button>
+        <button class="tab ${supplierTab==='drivers'?'active':''}"  onclick="supplierTab='drivers';render()">👥 我的司机</button>
+        <button class="tab ${supplierTab==='stats'?'active':''}"    onclick="supplierTab='stats';render()">📊 费用统计</button>
+      </div>
+      <div id="supplier-content"></div>
+    </div>
+  </div>`;
+  if (supplierTab === 'pr') renderSupplierPR();
+  else if (supplierTab === 'drivers') renderSupplierDrivers();
+  else renderSupplierStats();
+}
+
+function renderSupplierPR() {
+  const el = document.getElementById('supplier-content');
+  el.innerHTML = `
+  <div class="card">
+    <h3 class="card-title">创建对账 PR（2026-07）</h3>
+    <p class="card-sub">系统已自动汇总本月所有费用，提交前会进行 15 条规则校验</p>
+
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-label">费用笔数</div><div class="stat-value">${DB.expenses.length}</div></div>
+      <div class="stat"><div class="stat-label">总金额</div><div class="stat-value">¥ ${fmtMoney(DB.expenses.reduce((s,e) => s + e.actualAmount, 0))}</div></div>
+      <div class="stat"><div class="stat-label">凭证完整率</div>
+        <div class="stat-value" style="color:${completenessColor()}">${completeness()}%</div></div>
+      <div class="stat"><div class="stat-label">未确认打卡</div>
+        <div class="stat-value" style="color:${DB.attendances.filter(a=>a.hctConfirm==='PENDING').length ? 'var(--warn)' : 'var(--ok)'}">
+          ${DB.attendances.filter(a=>a.hctConfirm==='PENDING').length}</div></div>
+    </div>
+
+    <div class="divider"></div>
+    <h4 style="margin:0 0 10px 0;">费用明细</h4>
+    <table>
+      <thead><tr><th>类型</th><th>项目</th><th>金额</th><th>凭证</th><th>合规</th></tr></thead>
+      <tbody>${DB.expenses.map(e => `
+        <tr>
+          <td>${e.category}</td>
+          <td>${e.subCategory}</td>
+          <td class="mono">¥ ${fmtMoney(e.actualAmount)}</td>
+          <td>${e.evidences.length ? e.evidences.map(ev => `<span class="ev-thumb">${ev.slice(0,3)}</span>`).join('') : '<span class="text-bad">无</span>'}</td>
+          <td>${complianceBadge(e.complianceStatus)}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+
+    <div class="form-actions">
+      <button class="btn" onclick="validateAndSubmitPR()">🔍 校验并提交</button>
+    </div>
+    <div id="pr-result"></div>
+  </div>`;
+}
+
+function completeness() {
+  const total = DB.expenses.length;
+  const full = DB.expenses.filter(e =>
+    e.evidences.includes('INVOICE') &&
+    (e.inQuotation || (e.backgroundDesc && e.hctApprover && e.evidences.includes('OBJECT_PHOTO') && e.evidences.includes('REPORT_SCREENSHOT')))
+  ).length;
+  return total ? Math.round(full / total * 100) : 0;
+}
+function completenessColor() {
+  const c = completeness();
+  return c >= 90 ? 'var(--ok)' : c >= 50 ? 'var(--warn)' : 'var(--bad)';
+}
+
+function validateAndSubmitPR() {
+  const ctx = {
+    pr: { projectId: 1, supplierId: 1, settlementMonth: '2026-07' },
+    expenses: DB.expenses,
+    attendances: DB.attendances,
+  };
+  const errors = runAllRules(ctx);
+  const blocks = errors.filter(e => e.level === 'BLOCK');
+  const warns = errors.filter(e => e.level === 'WARN');
+  const el = document.getElementById('pr-result');
+
+  let html = `<h4 style="margin:20px 0 10px 0;">校验结果</h4>`;
+  if (blocks.length) {
+    html += `<div class="err-list"><b>🔴 阻断（${blocks.length} 项，必须修复后才能提交）</b>` +
+      blocks.map(e => `<div class="err-item"><span class="err-code">${e.code}</span>${e.name}：${e.message}</div>`).join('') + `</div>`;
+  }
+  if (warns.length) {
+    html += `<div class="err-list warn-list"><b>⚠️ 警告（${warns.length} 项，可继续）</b>` +
+      warns.map(e => `<div class="err-item"><span class="err-code">${e.code}</span>${e.name}：${e.message}</div>`).join('') + `</div>`;
+  }
+  if (!blocks.length && !warns.length) {
+    html += `<div class="ai-box"><b>✅ 全部 15 条规则通过！</b></div>`;
+  }
+
+  if (!blocks.length) {
+    html += `<div class="form-actions"><button class="btn" onclick="actuallySubmitPR()">✅ 校验通过，确认提交</button></div>`;
+  } else {
+    html += `<p class="muted">请先切换到「管理端」让 HCT 处理待确认打卡，或修复费用凭证。</p>`;
+  }
+  el.innerHTML = html;
+}
+
+function actuallySubmitPR() {
+  const pr = {
+    id: Date.now(), code: 'PR-2026-07-' + String(DB.prs.length + 1).padStart(3, '0'),
+    projectId: 1, supplierId: 1, settlementMonth: '2026-07',
+    actualAmount: DB.expenses.reduce((s, e) => s + e.actualAmount, 0),
+    status: 'pending', submittedAt: new Date().toISOString(),
+    approvalHistory: [],
+  };
+  DB.prs.push(pr);
+  DB.expenses.forEach(e => e.status = 'pending');
+  save();
+  toast(`PR ${pr.code} 已提交，等待 HCT 三级审批`);
+  renderSupplierStats(); supplierTab = 'stats'; render();
+}
+
+function renderSupplierDrivers() {
+  const el = document.getElementById('supplier-content');
+  el.innerHTML = `
+  <div class="card">
+    <h3 class="card-title">司机打卡情况</h3>
+    <table>
+      <thead><tr><th>司机</th><th>日期</th><th>照片</th><th>未打卡原因</th><th>HCT 确认</th></tr></thead>
+      <tbody>${DB.attendances.map(a => {
+        const d = DB.drivers.find(x => x.id === a.driverId);
+        return `<tr>
+          <td>${d?.name}</td>
+          <td class="mono">${a.date}</td>
+          <td>${a.photoIn ? '📷 有' : '❌ 缺'}</td>
+          <td>${a.noClockReason || '-'}</td>
+          <td>${a.hctConfirm === 'CONFIRMED' ? '<span class="badge badge-passed">已确认</span>' :
+                a.hctConfirm === 'REJECTED' ? '<span class="badge badge-rejected">已驳回</span>' :
+                '<span class="badge badge-pending">待确认</span>'}</td>
+        </tr>`;}).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function renderSupplierStats() {
+  const el = document.getElementById('supplier-content');
+  const prs = DB.prs;
+  el.innerHTML = `
+  <div class="card">
+    <h3 class="card-title">已提交的 PR</h3>
+    <table>
+      <thead><tr><th>PR 编号</th><th>月份</th><th>金额</th><th>状态</th><th>审批进度</th></tr></thead>
+      <tbody>${prs.map(p => `
+        <tr>
+          <td class="mono">${p.code}</td>
+          <td>${p.settlementMonth}</td>
+          <td class="mono">¥ ${fmtMoney(p.actualAmount)}</td>
+          <td>${badge(p.status)}</td>
+          <td>${p.approvalHistory?.length || 0} / 3 级</td>
+        </tr>`).join('') || '<tr><td colspan="5" class="muted">尚未提交 PR</td></tr>'}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+// ============================================================
+// Admin 端
+// ============================================================
+let adminTab = 'dashboard';
+
+function renderAdmin() {
+  app.innerHTML = `
+  <div class="app">
+    ${header('HCT 总部 · 项目经理')}
+    <div class="main">
+      <div class="tabs">
+        <button class="tab ${adminTab==='dashboard'?'active':''}" onclick="adminTab='dashboard';render()">📊 看板</button>
+        <button class="tab ${adminTab==='timesheet'?'active':''}" onclick="adminTab='timesheet';render()">⏰ 工时确认</button>
+        <button class="tab ${adminTab==='expense'?'active':''}"   onclick="adminTab='expense';render()">💰 费用审核</button>
+        <button class="tab ${adminTab==='pr'?'active':''}"        onclick="adminTab='pr';render()">📋 PR 审批</button>
+        <button class="tab ${adminTab==='prompt'?'active':''}"    onclick="adminTab='prompt';render()">🤖 AI Prompt</button>
+      </div>
+      <div id="admin-content"></div>
+    </div>
+  </div>`;
+  if (adminTab === 'dashboard') renderAdminDashboard();
+  else if (adminTab === 'timesheet') renderAdminTimesheet();
+  else if (adminTab === 'expense') renderAdminExpense();
+  else if (adminTab === 'pr') renderAdminPR();
+  else renderAdminPrompt();
+}
+
+// ============================================================
+// 6 个月虚拟历史数据（讲故事用）
+// ============================================================
+const HISTORY = {
+  months: ['4月', '5月', '6月', '7月', '8月', '9月'],
+  // 月度总额（万元）
+  totals: [287000, 312000, 298000, 349857, 365000, 372000],
+  // 凭证完整率（%）
+  completeness: [11.9, 34, 58, 33, 76, 94],
+  // 异常条数
+  anomalies: [23, 18, 12, 15, 7, 2],
+  // 待审批 PR
+  pendingPRs: [8, 6, 5, 3, 2, 1],
+  // 月度类别构成（用于堆叠图）
+  categories: {
+    '固定费用':  [168000, 182000, 175000, 282000, 218000, 224000],
+    '车辆运营':  [78000,  82000,  81000,  48000,  92000,  94000],
+    '代采购':    [28000,  32000,  28000,  12000,  38000,  36000],
+    '数据回传':  [13000,  16000,  14000,  7857,   17000,  18000],
+  },
+  // 月度审批漏斗
+  funnelByMonth: [
+    { label: '4月', submitted: 38, firstPass: 12, finalPass: 6,  settled: 4 },
+    { label: '5月', submitted: 35, firstPass: 18, finalPass: 11, settled: 8 },
+    { label: '6月', submitted: 32, firstPass: 22, finalPass: 16, settled: 12 },
+    { label: '7月', submitted: 32, firstPass: 14, finalPass: 8,  settled: 5 },
+    { label: '8月', submitted: 28, firstPass: 24, finalPass: 21, settled: 18 },
+    { label: '9月', submitted: 26, firstPass: 24, finalPass: 23, settled: 22 },
+  ],
+};
+
+// ============================================================
+// 5 家供应商横向对比数据
+// ============================================================
+const SUPPLIERS = [
+  { code: 'A', name: '供应商A', region: '欧洲',   regionFlag: '🇪🇺',
+    monthlyTotal: 372000, km: 76700, costPerKm: 4.85,
+    completeness: 94, anomalies: 2, score: 92,
+    radar: [0.94, 0.92, 0.90, 0.88, 0.95],
+    monthlyTrend: [312000, 328000, 315000, 340000, 358000, 372000],
+    color: '#5b5cff' },
+  { code: 'B', name: '供应商B', region: '欧洲',   regionFlag: '🇪🇺',
+    monthlyTotal: 298000, km: 57300, costPerKm: 5.20,
+    completeness: 87, anomalies: 4, score: 85,
+    radar: [0.87, 0.85, 0.82, 0.88, 0.83],
+    monthlyTrend: [268000, 275000, 282000, 288000, 292000, 298000],
+    color: '#8a5bff' },
+  { code: 'C', name: '供应商C', region: '英国',   regionFlag: '🇬🇧',
+    monthlyTotal: 215000, km: 46700, costPerKm: 4.60,
+    completeness: 76, anomalies: 8, score: 74,
+    radar: [0.76, 0.78, 0.72, 0.68, 0.72],
+    monthlyTrend: [228000, 232000, 218000, 242000, 220000, 215000],
+    color: '#f59e0b' },
+  { code: 'D', name: '供应商D', region: '北美',   regionFlag: '🇺🇸',
+    monthlyTotal: 186000, km: 30500, costPerKm: 6.10,
+    completeness: 91, anomalies: 3, score: 88,
+    radar: [0.91, 0.88, 0.85, 0.92, 0.86],
+    monthlyTrend: [162000, 170000, 174000, 178000, 182000, 186000],
+    color: '#10b981' },
+  { code: 'E', name: '供应商E', region: '亚太',   regionFlag: '🇨🇳',
+    monthlyTotal: 142000, km: 24500, costPerKm: 5.80,
+    completeness: 68, anomalies: 12, score: 62,
+    radar: [0.68, 0.65, 0.58, 0.62, 0.55],
+    monthlyTrend: [158000, 152000, 148000, 154000, 146000, 142000],
+    color: '#ef4444' },
+];
+
+const RADAR_AXES = ['凭证完整', '报价合规', '时效性', '响应速度', '成本控制'];
+
+// ============================================================
+// SVG 图表生成器
+// ============================================================
+
+// 折线图：近 6 月费用趋势
+function renderLineChart(data, width = 560, height = 200) {
+  const pad = { top: 20, right: 20, bottom: 30, left: 50 };
+  const w = width - pad.left - pad.right;
+  const h = height - pad.top - pad.bottom;
+  const max = Math.max(...data.map(d => d.value)) * 1.15;
+  const min = 0;
+  const x = i => pad.left + (i / (data.length - 1)) * w;
+  const y = v => pad.top + h - ((v - min) / (max - min)) * h;
+
+  // 平滑曲线（Catmull-Rom → Bezier）
+  let path = `M ${x(0)},${y(data[0].value)}`;
+  for (let i = 0; i < data.length - 1; i++) {
+    const p0 = data[Math.max(0, i - 1)].value, p1 = data[i].value;
+    const p2 = data[i + 1].value, p3 = data[Math.min(data.length - 1, i + 2)].value;
+    const c1x = x(i) + (x(i+1) - x(i)) / 3, c1y = y(p1) + (y(p2) - y(p0)) / 6;
+    const c2x = x(i+1) - (x(i+1) - x(i)) / 3, c2y = y(p2) - (y(p3) - y(p1)) / 6;
+    path += ` C ${c1x},${c1y} ${c2x},${c2y} ${x(i+1)},${y(p2)}`;
+  }
+  const areaPath = path + ` L ${x(data.length-1)},${pad.top + h} L ${x(0)},${pad.top + h} Z`;
+
+  // Y 轴 4 条网格线
+  const gridLines = [0, 0.25, 0.5, 0.75, 1].map(t => {
+    const v = min + (max - min) * t, gy = y(v);
+    return `
+      <line x1="${pad.left}" y1="${gy}" x2="${pad.left + w}" y2="${gy}" stroke="#e8e8ed" stroke-width="1" stroke-dasharray="${t===0?'0':'3 3'}"/>
+      <text x="${pad.left - 8}" y="${gy + 4}" text-anchor="end" font-size="11" fill="#86868b">¥${(v/10000).toFixed(0)}w</text>`;
+  }).join('');
+
+  return `
+  <svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto;display:block;">
+    <defs>
+      <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#5b5cff" stop-opacity=".25"/>
+        <stop offset="100%" stop-color="#5b5cff" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#5b5cff"/>
+        <stop offset="100%" stop-color="#8a5bff"/>
+      </linearGradient>
+    </defs>
+    ${gridLines}
+    <path d="${areaPath}" fill="url(#areaGrad)" class="chart-area"/>
+    <path d="${path}" fill="none" stroke="url(#lineGrad)" stroke-width="2.5" stroke-linecap="round" class="chart-line"/>
+    ${data.map((d, i) => `
+      <circle cx="${x(i)}" cy="${y(d.value)}" r="4" fill="#fff" stroke="url(#lineGrad)" stroke-width="2.5"/>
+      <text x="${x(i)}" y="${pad.top + h + 20}" text-anchor="middle" font-size="11" fill="#86868b">${d.label}</text>
+      ${i === data.length - 1 ? `<text x="${x(i)}" y="${y(d.value) - 12}" text-anchor="middle" font-size="12" font-weight="700" fill="#5b5cff">¥${fmtMoney(d.value)}</text>` : ''}
+    `).join('')}
+  </svg>
+  <style>
+    .chart-line{stroke-dasharray:2000;stroke-dashoffset:2000;animation:lineGrow 1.5s cubic-bezier(.2,.8,.2,1) forwards .2s;}
+    .chart-area{opacity:0;animation:fadeIn .8s ease forwards 1s;}
+    @keyframes lineGrow{to{stroke-dashoffset:0;}}
+    @keyframes fadeIn{to{opacity:1;}}
+  </style>`;
+}
+
+// 环形进度条
+function renderRing(percent, size = 160, label = '') {
+  const r = (size - 20) / 2, cx = size / 2, cy = size / 2;
+  const circumference = 2 * Math.PI * r;
+  const offset = circumference * (1 - percent / 100);
+  const color = percent >= 90 ? '#10b981' : percent >= 60 ? '#f59e0b' : '#ef4444';
+  return `
+  <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#f0f0f2" stroke-width="14"/>
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="14"
+      stroke-linecap="round" stroke-dasharray="${circumference}" stroke-dashoffset="${circumference}"
+      transform="rotate(-90 ${cx} ${cy})" style="transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1);"
+      data-target-offset="${offset}"/>
+    <text x="${cx}" y="${cy + 4}" text-anchor="middle" class="ring-label" fill="${color}">${percent}%</text>
+    <text x="${cx}" y="${cy + 24}" text-anchor="middle" class="ring-sub" fill="#86868b">${label}</text>
+  </svg>`;
+}
+
+// 饼图
+function renderPie(data, size = 200) {
+  const cx = size / 2, cy = size / 2, r = size / 2 - 10;
+  const total = data.reduce((s, d) => s + d.value, 0);
+  let angle = -Math.PI / 2;
+  const colors = ['#5b5cff', '#8a5bff', '#b45bff', '#5b8aff', '#5bc8ff', '#10b981'];
+
+  const segments = data.map((d, i) => {
+    const pct = d.value / total;
+    const startAngle = angle;
+    const endAngle = angle + pct * Math.PI * 2;
+    angle = endAngle;
+    const largeArc = pct > 0.5 ? 1 : 0;
+    const x1 = cx + r * Math.cos(startAngle), y1 = cy + r * Math.sin(startAngle);
+    const x2 = cx + r * Math.cos(endAngle), y2 = cy + r * Math.sin(endAngle);
+    return {
+      path: `M ${cx},${cy} L ${x1},${y1} A ${r},${r} 0 ${largeArc} 1 ${x2},${y2} Z`,
+      color: colors[i % colors.length], label: d.label, value: d.value, pct,
+    };
+  });
+
+  return `
+  <svg viewBox="0 0 ${size} ${size}" style="width:100%;max-width:${size}px;height:auto;display:block;margin:0 auto;">
+    ${segments.map(s => `<path d="${s.path}" fill="${s.color}" class="pie-seg"><title>${s.label}: ¥${fmtMoney(s.value)} (${(s.pct*100).toFixed(1)}%)</title></path>`).join('')}
+  </svg>
+  <div class="chart-legend">
+    ${segments.map(s => `
+      <div class="legend-item">
+        <div class="legend-dot" style="background:${s.color}"></div>
+        <span>${s.label} · ${(s.pct*100).toFixed(1)}%</span>
+      </div>`).join('')}
+  </div>`;
+}
+
+// 漏斗图
+function renderFunnel(stages) {
+  const max = Math.max(...stages.map(s => s.value));
+  return stages.map((s, i) => {
+    const pct = (s.value / max) * 100;
+    const colors = ['#5b5cff', '#7a5cff', '#8a5bff', '#a55bff', '#c05bff'];
+    return `
+    <div class="funnel-row">
+      <div class="funnel-label">${s.label}</div>
+      <div class="funnel-bar" style="width:0;background:${colors[i % colors.length]};" data-width="${pct}">${s.value}</div>
+    </div>`;
+  }).join('');
+}
+
+// 雷达图
+function renderRadar(axes, values, size = 240) {
+  const cx = size / 2, cy = size / 2, r = size / 2 - 40;
+  const n = axes.length;
+  const angle = i => (Math.PI * 2 * i) / n - Math.PI / 2;
+  const point = (i, ratio) => `${cx + r * ratio * Math.cos(angle(i))},${cy + r * ratio * Math.sin(angle(i))}`;
+
+  // 背景网格（4 圈）
+  const grids = [0.25, 0.5, 0.75, 1].map(ratio =>
+    `<polygon points="${Array.from({length:n},(_,i)=>point(i,ratio)).join(' ')}" class="radar-grid"/>`
+  ).join('');
+  // 轴线
+  const axisLines = Array.from({length:n},(_,i) =>
+    `<line x1="${cx}" y1="${cy}" x2="${cx + r * Math.cos(angle(i))}" y2="${cy + r * Math.sin(angle(i))}" class="radar-axis"/>`
+  ).join('');
+  // 标签
+  const labels = axes.map((a, i) => {
+    const labelR = r + 18;
+    const x = cx + labelR * Math.cos(angle(i));
+    const y = cy + labelR * Math.sin(angle(i));
+    return `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" class="radar-label">${a}</text>`;
+  }).join('');
+  // 数据多边形
+  const dataPoints = values.map((v, i) => point(i, v)).join(' ');
+  const dots = values.map((v, i) => {
+    const [x, y] = point(i, v).split(',');
+    return `<circle cx="${x}" cy="${y}" r="4" class="radar-dot"/>`;
+  }).join('');
+
+  return `
+  <svg viewBox="0 0 ${size} ${size}" style="width:100%;max-width:${size}px;height:auto;display:block;margin:0 auto;">
+    ${grids}${axisLines}
+    <polygon points="${dataPoints}" class="radar-shape"/>
+    ${dots}${labels}
+  </svg>`;
+}
+
+// 折线 mock 数据：近 6 月趋势（基于当前实际总额推算）
+function buildTrendData() {
+  const cur = DB.expenses.reduce((s, e) => s + e.actualAmount, 0);
+  const trend = [0.72, 0.81, 0.78, 0.88, 0.92, 1.0];  // 模拟逐月上升
+  const labels = ['4月', '5月', '6月', '7月', '8月', '9月'];
+  return trend.map((t, i) => ({ label: labels[i], value: Math.round(cur * t) }));
+}
+
+// 双折线图：费用趋势 + 凭证完整率（双 Y 轴）
+function renderDualLineChart(width = 560, height = 220) {
+  const pad = { top: 24, right: 56, bottom: 30, left: 56 };
+  const w = width - pad.left - pad.right;
+  const h = height - pad.top - pad.bottom;
+  const n = HISTORY.months.length;
+
+  const maxTotal = Math.max(...HISTORY.totals) * 1.1;
+  const x = i => pad.left + (i / (n - 1)) * w;
+  const yTotal = v => pad.top + h - (v / maxTotal) * h;
+  const yComp = v => pad.top + h - (v / 100) * h;
+
+  // 平滑路径
+  function smoothPath(values, yFn) {
+    let p = `M ${x(0)},${yFn(values[0])}`;
+    for (let i = 0; i < n - 1; i++) {
+      const p0 = values[Math.max(0, i - 1)], p1 = values[i];
+      const p2 = values[i + 1], p3 = values[Math.min(n - 1, i + 2)];
+      const c1x = x(i) + (x(i+1) - x(i)) / 3, c1y = yFn(p1) + (yFn(p2) - yFn(p0)) / 6;
+      const c2x = x(i+1) - (x(i+1) - x(i)) / 3, c2y = yFn(p2) - (yFn(p3) - yFn(p1)) / 6;
+      p += ` C ${c1x},${c1y} ${c2x},${c2y} ${x(i+1)},${yFn(p2)}`;
+    }
+    return p;
+  }
+
+  const totalPath = smoothPath(HISTORY.totals, yTotal);
+  const compPath = smoothPath(HISTORY.completeness, yComp);
+  const totalArea = totalPath + ` L ${x(n-1)},${pad.top+h} L ${x(0)},${pad.top+h} Z`;
+
+  const gridLines = [0, 0.5, 1].map(t => {
+    const gy = pad.top + h * (1 - t);
+    return `<line x1="${pad.left}" y1="${gy}" x2="${pad.left+w}" y2="${gy}" stroke="#e8e8ed" stroke-width="1" stroke-dasharray="3 3"/>`;
+  }).join('');
+
+  return `
+  <svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto;display:block;">
+    <defs>
+      <linearGradient id="totalGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#5b5cff" stop-opacity=".25"/>
+        <stop offset="100%" stop-color="#5b5cff" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    ${gridLines}
+    <path d="${totalArea}" fill="url(#totalGrad)" style="animation:fadeIn .8s ease .8s both;"/>
+    <path d="${totalPath}" fill="none" stroke="#5b5cff" stroke-width="2.5" stroke-linecap="round" class="chart-line"/>
+    <path d="${compPath}" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 4" class="chart-line" style="animation-delay:.4s;"/>
+
+    ${HISTORY.months.map((m, i) => `
+      <circle cx="${x(i)}" cy="${yTotal(HISTORY.totals[i])}" r="4" fill="#fff" stroke="#5b5cff" stroke-width="2.5"/>
+      <circle cx="${x(i)}" cy="${yComp(HISTORY.completeness[i])}" r="4" fill="#fff" stroke="#10b981" stroke-width="2.5"/>
+      <text x="${x(i)}" y="${pad.top+h+18}" text-anchor="middle" font-size="11" fill="#86868b">${m}</text>
+    `).join('')}
+
+    <text x="${pad.left - 8}" y="${pad.top}" text-anchor="end" font-size="10" fill="#5b5cff" font-weight="600">金额</text>
+    <text x="${pad.left + w + 8}" y="${pad.top}" text-anchor="start" font-size="10" fill="#10b981" font-weight="600">完整率</text>
+
+    ${HISTORY.months.map((m, i) => i === n - 1 ? `
+      <text x="${x(i)}" y="${yTotal(HISTORY.totals[i]) - 10}" text-anchor="middle" font-size="11" font-weight="700" fill="#5b5cff">¥${(HISTORY.totals[i]/10000).toFixed(1)}w</text>
+      <text x="${x(i)}" y="${yComp(HISTORY.completeness[i]) - 10}" text-anchor="middle" font-size="11" font-weight="700" fill="#10b981">${HISTORY.completeness[i]}%</text>
+    ` : '').join('')}
+  </svg>
+  <div class="chart-legend" style="margin-top:6px;">
+    <div class="legend-item"><div class="legend-dot" style="background:#5b5cff;"></div><span>月度总额（万元）</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#10b981;"></div><span>凭证完整率（%）</span></div>
+  </div>`;
+}
+
+// 堆叠面积图：6 个月各类别费用构成
+function renderStackedArea(width = 560, height = 220) {
+  const pad = { top: 24, right: 20, bottom: 30, left: 50 };
+  const w = width - pad.left - pad.right;
+  const h = height - pad.top - pad.bottom;
+  const n = HISTORY.months.length;
+  const cats = Object.keys(HISTORY.categories);
+  const colors = ['#5b5cff', '#8a5bff', '#b45bff', '#5bc8ff'];
+
+  const totals = HISTORY.months.map((_, i) => cats.reduce((s, c) => s + HISTORY.categories[c][i], 0));
+  const maxTotal = Math.max(...totals) * 1.1;
+  const x = i => pad.left + (i / (n - 1)) * w;
+  const y = v => pad.top + h - (v / maxTotal) * h;
+
+  // 每层累加
+  let layers = [];
+  let cumulative = new Array(n).fill(0);
+  cats.forEach((cat, ci) => {
+    const values = HISTORY.categories[cat];
+    const top = values.map((v, i) => cumulative[i] + v);
+    // 顶边
+    let topPath = `M ${x(0)},${y(top[0])}`;
+    for (let i = 1; i < n; i++) topPath += ` L ${x(i)},${y(top[i])}`;
+    // 底边（反向）
+    let botPath = '';
+    for (let i = n - 1; i >= 0; i--) botPath += ` L ${x(i)},${y(cumulative[i])}`;
+    layers.push(`<path d="${topPath}${botPath} Z" fill="${colors[ci]}" fill-opacity=".8" style="animation:fadeIn .8s ease ${.15 * ci}s both;"><title>${cat}</title></path>`);
+    cumulative = top;
+  });
+
+  const gridLines = [0, 0.5, 1].map(t => {
+    const gy = pad.top + h * (1 - t);
+    return `<line x1="${pad.left}" y1="${gy}" x2="${pad.left+w}" y2="${gy}" stroke="#e8e8ed" stroke-width="1" stroke-dasharray="3 3"/>`;
+  }).join('');
+
+  return `
+  <svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto;display:block;">
+    ${gridLines}
+    ${layers.join('')}
+    ${HISTORY.months.map((m, i) => `
+      <text x="${x(i)}" y="${pad.top+h+18}" text-anchor="middle" font-size="11" fill="#86868b">${m}</text>
+    `).join('')}
+  </svg>
+  <div class="chart-legend" style="margin-top:6px;">
+    ${cats.map((c, i) => `
+      <div class="legend-item"><div class="legend-dot" style="background:${colors[i]};"></div><span>${c}</span></div>
+    `).join('')}
+  </div>`;
+}
+
+// 异常趋势柱状图
+function renderAnomalyBars(width = 560, height = 200) {
+  const pad = { top: 24, right: 20, bottom: 30, left: 40 };
+  const w = width - pad.left - pad.right;
+  const h = height - pad.top - pad.bottom;
+  const n = HISTORY.months.length;
+  const maxV = Math.max(...HISTORY.anomalies) * 1.15;
+  const barW = w / n * 0.5;
+
+  return `
+  <svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto;display:block;">
+    ${[0, 0.5, 1].map(t => {
+      const gy = pad.top + h * (1 - t);
+      return `<line x1="${pad.left}" y1="${gy}" x2="${pad.left+w}" y2="${gy}" stroke="#e8e8ed" stroke-dasharray="3 3"/>`;
+    }).join('')}
+    ${HISTORY.anomalies.map((v, i) => {
+      const bx = pad.left + (i + 0.25) * (w / n);
+      const bh = (v / maxV) * h;
+      const by = pad.top + h - bh;
+      const color = v > 15 ? '#ef4444' : v > 8 ? '#f59e0b' : '#10b981';
+      return `
+        <rect x="${bx}" y="${by}" width="${barW}" height="${bh}" rx="4" fill="${color}" opacity=".85"
+          style="transform-origin:${bx + barW/2}px ${pad.top + h}px;animation:barGrow .8s cubic-bezier(.2,.8,.2,1) ${i * .08}s both;"/>
+        <text x="${bx + barW/2}" y="${by - 6}" text-anchor="middle" font-size="11" font-weight="700" fill="${color}">${v}</text>
+        <text x="${bx + barW/2}" y="${pad.top + h + 18}" text-anchor="middle" font-size="11" fill="#86868b">${HISTORY.months[i]}</text>
+      `;
+    }).join('')}
+    <style>@keyframes barGrow{from{transform:scaleY(0);}to{transform:scaleY(1);}}</style>
+  </svg>`;
+}
+
+// 当前查看的月份索引（0=4月, 5=9月）
+let selectedMonthIdx = 5;
+window.selectMonth = function(idx) {
+  selectedMonthIdx = idx;
+  renderAdminDashboard();
+};
+
+// 折线图上高亮当前查看月份
+function renderDualLineChartHighlight(width = 560, height = 220) {
+  const pad = { top: 24, right: 56, bottom: 30, left: 56 };
+  const w = width - pad.left - pad.right;
+  const h = height - pad.top - pad.bottom;
+  const n = HISTORY.months.length;
+  const maxTotal = Math.max(...HISTORY.totals) * 1.1;
+  const x = i => pad.left + (i / (n - 1)) * w;
+  const yTotal = v => pad.top + h - (v / maxTotal) * h;
+  const yComp = v => pad.top + h - (v / 100) * h;
+
+  function smoothPath(values, yFn) {
+    let p = `M ${x(0)},${yFn(values[0])}`;
+    for (let i = 0; i < n - 1; i++) {
+      const p0 = values[Math.max(0, i - 1)], p1 = values[i];
+      const p2 = values[i + 1], p3 = values[Math.min(n - 1, i + 2)];
+      const c1x = x(i) + (x(i+1) - x(i)) / 3, c1y = yFn(p1) + (yFn(p2) - yFn(p0)) / 6;
+      const c2x = x(i+1) - (x(i+1) - x(i)) / 3, c2y = yFn(p2) - (yFn(p3) - yFn(p1)) / 6;
+      p += ` C ${c1x},${c1y} ${c2x},${c2y} ${x(i+1)},${yFn(p2)}`;
+    }
+    return p;
+  }
+  const totalPath = smoothPath(HISTORY.totals, yTotal);
+  const compPath = smoothPath(HISTORY.completeness, yComp);
+  const totalArea = totalPath + ` L ${x(n-1)},${pad.top+h} L ${x(0)},${pad.top+h} Z`;
+
+  const gridLines = [0, 0.5, 1].map(t => {
+    const gy = pad.top + h * (1 - t);
+    return `<line x1="${pad.left}" y1="${gy}" x2="${pad.left+w}" y2="${gy}" stroke="#e8e8ed" stroke-width="1" stroke-dasharray="3 3"/>`;
+  }).join('');
+
+  // 高亮当前选中月份的垂直参考线
+  const selX = x(selectedMonthIdx);
+  const selHighlight = `
+    <line x1="${selX}" y1="${pad.top}" x2="${selX}" y2="${pad.top+h}" stroke="#5b5cff" stroke-width="1.5" stroke-dasharray="4 4" opacity=".6"/>
+    <circle cx="${selX}" cy="${yTotal(HISTORY.totals[selectedMonthIdx])}" r="7" fill="#5b5cff" stroke="#fff" stroke-width="3" style="filter:drop-shadow(0 2px 4px rgba(91,92,255,.4));"/>
+    <circle cx="${selX}" cy="${yComp(HISTORY.completeness[selectedMonthIdx])}" r="7" fill="#10b981" stroke="#fff" stroke-width="3" style="filter:drop-shadow(0 2px 4px rgba(16,185,129,.4));"/>`;
+
+  return `
+  <svg viewBox="0 0 ${width} ${height}" style="width:100%;height:auto;display:block;">
+    <defs>
+      <linearGradient id="totalGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#5b5cff" stop-opacity=".25"/>
+        <stop offset="100%" stop-color="#5b5cff" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    ${gridLines}
+    <path d="${totalArea}" fill="url(#totalGrad)" style="animation:fadeIn .8s ease .8s both;"/>
+    <path d="${totalPath}" fill="none" stroke="#5b5cff" stroke-width="2.5" stroke-linecap="round" class="chart-line"/>
+    <path d="${compPath}" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 4" class="chart-line" style="animation-delay:.4s;"/>
+    ${HISTORY.months.map((m, i) => `
+      <circle cx="${x(i)}" cy="${yTotal(HISTORY.totals[i])}" r="4" fill="#fff" stroke="#5b5cff" stroke-width="2.5" style="cursor:pointer;" onclick="selectMonth(${i})"/>
+      <circle cx="${x(i)}" cy="${yComp(HISTORY.completeness[i])}" r="4" fill="#fff" stroke="#10b981" stroke-width="2.5" style="cursor:pointer;" onclick="selectMonth(${i})"/>
+      <text x="${x(i)}" y="${pad.top+h+18}" text-anchor="middle" font-size="11" fill="${i === selectedMonthIdx ? '#5b5cff' : '#86868b'}" font-weight="${i === selectedMonthIdx ? '700' : '400'}" style="cursor:pointer;" onclick="selectMonth(${i})">${m}</text>
+    `).join('')}
+    ${selHighlight}
+    <text x="${pad.left - 8}" y="${pad.top}" text-anchor="end" font-size="10" fill="#5b5cff" font-weight="600">金额</text>
+    <text x="${pad.left + w + 8}" y="${pad.top}" text-anchor="start" font-size="10" fill="#10b981" font-weight="600">完整率</text>
+  </svg>
+  <div class="chart-legend" style="margin-top:6px;">
+    <div class="legend-item"><div class="legend-dot" style="background:#5b5cff;"></div><span>月度总额</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#10b981;"></div><span>凭证完整率</span></div>
+    <div class="legend-item" style="margin-left:auto;color:var(--muted);">💡 点击任意月份的数据点 / 月份名切换</div>
+  </div>`;
+}
+
+function renderSupplierComparison() {
+  const monthMaxima = HISTORY.months.map((_, monthIdx) =>
+    Math.max(...SUPPLIERS.map(supplier => supplier.monthlyTrend[monthIdx]))
+  );
+  return `
+    <div class="card col-12 reveal">
+      <h3 class="card-title">5 家供应商费用横向对比</h3>
+      <p class="card-sub">2026 年 4–9 月模拟月度费用 · 人民币（元）；成本/公里、凭证完整率及异常数为最新快照</p>
+      <div class="supplier-comparison-wrap">
+        <table class="supplier-comparison-table">
+          <thead><tr><th>供应商 / 区域</th>${HISTORY.months.map(month => `<th class="supplier-month-cell">${month}</th>`).join('')}<th>成本 / 公里</th><th>凭证完整率</th><th>异常</th></tr></thead>
+          <tbody>${SUPPLIERS.map(supplier => `
+            <tr>
+              <td><strong>${supplier.name}</strong><div class="muted">${supplier.regionFlag} ${supplier.region}</div></td>
+              ${supplier.monthlyTrend.map((amount, monthIdx) => `
+                <td class="supplier-month-cell">
+                  <div class="mono">¥ ${fmtMoney(amount)}</div>
+                  <div class="supplier-month-track"><div class="supplier-month-fill" style="width:${amount / monthMaxima[monthIdx] * 100}%;background:${supplier.color};"></div></div>
+                </td>`).join('')}
+              <td class="mono">¥ ${fmtMoney(supplier.costPerKm)}</td>
+              <td><span style="color:${supplier.completeness >= 90 ? 'var(--ok)' : supplier.completeness >= 75 ? 'var(--warn)' : 'var(--bad)'};font-weight:600;">${supplier.completeness}%</span></td>
+              <td>${supplier.anomalies}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function renderAdminDashboard() {
+  const el = document.getElementById('admin-content');
+  const mi = selectedMonthIdx;
+  const monthLabel = HISTORY.months[mi];
+  const total = HISTORY.totals[mi];
+  const compPct = HISTORY.completeness[mi];
+  const anomalyCount = HISTORY.anomalies[mi];
+  const pendingPR = HISTORY.pendingPRs[mi];
+  const prevTotal = mi > 0 ? HISTORY.totals[mi - 1] : HISTORY.totals[0];
+  const momDelta = ((total / prevTotal) - 1) * 100;
+  const budgetPct = total / DB.project.budgetTotal * 100;
+
+  // 类别构成（按选中月）
+  const cats = Object.keys(HISTORY.categories);
+  const pieData = cats.map(c => ({ label: c, value: HISTORY.categories[c][mi] }));
+
+  // 漏斗（按选中月）
+  const m = HISTORY.funnelByMonth[mi];
+  const funnelData = [
+    { label: '提交 PR', value: m.submitted },
+    { label: '通过初审', value: m.firstPass },
+    { label: '通过财务', value: m.finalPass },
+    { label: '已结算', value: m.settled },
+  ];
+
+  // 实时异常（仅当前月显示，历史月份给模拟数据）
+  let anomalies = [];
+  if (mi === 5) {
+    DB.expenses.forEach(e => {
+      if (e.actualAmount >= 50000 && !e.evidences.includes('INVOICE'))
+        anomalies.push({ time: '09:23', level: 'high', code: 'V-010', text: `大额费用缺发票：${e.subCategory} ¥${fmtMoney(e.actualAmount)}` });
+      if (e._region && e._region !== 'EU')
+        anomalies.push({ time: '昨天', level: 'mid', code: 'V-014', text: `跨区域费用混入：${e.subCategory}（${e._region}）` });
+      if (e.currency !== 'CNY' && Math.abs(e.exchangeRate - MARKET_FX[e.currency]) / MARKET_FX[e.currency] > 0.1)
+        anomalies.push({ time: '08:15', level: 'mid', code: 'V-012', text: `汇率偏离 ${e.currency} 市场价 ${(Math.abs(e.exchangeRate - MARKET_FX[e.currency]) / MARKET_FX[e.currency] * 100).toFixed(0)}%` });
+    });
+    const noClock = DB.attendances.filter(a => (!a.photoIn || !a.photoOut) && a.hctConfirm === 'PENDING').length;
+    if (noClock) anomalies.unshift({ time: '10:02', level: 'high', code: 'V-005', text: `${noClock} 条未打卡记录缺 HCT 确认` });
+  } else {
+    // 历史月份的模拟异常
+    const seedAnomalies = {
+      0: [ { code: 'V-001', level: 'high', text: 'PR 信息不完整 ×8' }, { code: 'V-005', level: 'high', text: '打卡照片缺失 ×11' }, { code: 'V-007', level: 'mid', text: '报价单外凭证不全 ×4' } ],
+      1: [ { code: 'V-005', level: 'high', text: '打卡照片缺失 ×7' }, { code: 'V-007', level: 'mid', text: '报价单外凭证不全 ×6' }, { code: 'V-012', level: 'mid', text: '汇率异常 ×5' } ],
+      2: [ { code: 'V-005', level: 'mid', text: '打卡照片缺失 ×5' }, { code: 'V-007', level: 'mid', text: '报价单外凭证不全 ×4' }, { code: 'V-014', level: 'mid', text: '跨区域费用 ×3' } ],
+      3: [ { code: 'V-010', level: 'high', text: 'GDPR 15w 缺发票' }, { code: 'V-005', level: 'high', text: '张三/李四 11 天未打卡' }, { code: 'V-014', level: 'mid', text: 'UK 费用混入' } ],
+      4: [ { code: 'V-005', level: 'mid', text: '打卡照片缺失 ×3' }, { code: 'V-012', level: 'mid', text: '汇率异常 ×2' }, { code: 'V-007', level: 'mid', text: '凭证不全 ×2' } ],
+    };
+    anomalies = (seedAnomalies[mi] || []).map(a => ({ ...a, time: monthLabel }));
+  }
+
+  // 雷达图（按选中月变化）
+  const radarAxes = ['凭证完整', '报价合规', '时效性', '响应速度', '历史纠纷'];
+  const radarBase = [
+    [0.12, 0.42, 0.55, 0.60, 0.50],  // 4月
+    [0.34, 0.50, 0.62, 0.68, 0.60],  // 5月
+    [0.58, 0.55, 0.70, 0.72, 0.70],  // 6月
+    [0.33, 0.50, 0.72, 0.75, 0.75],  // 7月（问题月）
+    [0.76, 0.60, 0.78, 0.78, 0.85],  // 8月
+    [0.94, 0.65, 0.82, 0.78, 0.92],  // 9月
+  ];
+  const radarValues = radarBase[mi];
+
+  el.innerHTML = `
+  <div class="month-switcher reveal visible">
+    <span class="month-switcher-label">查看月份</span>
+    ${HISTORY.months.map((m, i) => `
+      <button class="month-pill ${i === mi ? 'active' : ''}" onclick="selectMonth(${i})">
+        <span class="dot"></span>${m}
+      </button>`).join('')}
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat reveal"><div class="stat-label">${monthLabel}结算总额</div>
+      <div class="stat-value brand-gradient" data-count="${total}" data-prefix="¥ ">0</div>
+      <div class="stat-delta ${momDelta >= 0 ? 'up' : 'down'}">${momDelta >= 0 ? '↑' : '↓'} ${Math.abs(momDelta).toFixed(1)}% vs 上月</div></div>
+    <div class="stat reveal"><div class="stat-label">预算执行率</div>
+      <div class="stat-value" data-count="${budgetPct}" data-suffix="%" data-decimals="1">0</div>
+      <div class="stat-delta">预算 ¥ ${fmtMoney(DB.project.budgetTotal)}</div></div>
+    <div class="stat reveal"><div class="stat-label">凭证完整率</div>
+      <div class="stat-value" data-count="${compPct}" data-suffix="%" data-decimals="1">0</div>
+      <div class="stat-delta ${mi > 0 && HISTORY.completeness[mi] >= HISTORY.completeness[mi-1] ? 'up' : 'down'}">
+        ${mi > 0 ? (HISTORY.completeness[mi] >= HISTORY.completeness[mi-1] ? '↑' : '↓') + ' ' + Math.abs(HISTORY.completeness[mi] - HISTORY.completeness[mi-1]).toFixed(1) + 'pp vs 上月' : '基线月'}
+      </div></div>
+    <div class="stat reveal"><div class="stat-label">待处理异常</div>
+      <div class="stat-value" data-count="${anomalyCount}">0</div>
+      <div class="stat-delta ${mi > 0 && HISTORY.anomalies[mi] <= HISTORY.anomalies[mi-1] ? 'up' : 'down'}">
+        ${mi > 0 ? (HISTORY.anomalies[mi] <= HISTORY.anomalies[mi-1] ? '↓' : '↑') + ' ' + Math.abs(HISTORY.anomalies[mi] - HISTORY.anomalies[mi-1]) + ' 条 vs 上月' : '基线月'}
+      </div></div>
+  </div>
+
+  <div class="dash-grid">
+    <div class="card col-12 reveal">
+      <h3 class="card-title">系统上线 6 个月成效</h3>
+      <p class="card-sub">月度总额（紫） vs 凭证完整率（绿）· 当前查看 <b style="color:var(--brand);">${monthLabel}</b></p>
+      <div class="chart-wrap">${renderDualLineChartHighlight()}</div>
+    </div>
+
+    <div class="card col-6 reveal">
+      <h3 class="card-title">费用构成 6 个月演变</h3>
+      <p class="card-sub">堆叠面积图 · 看 GDPR 等一次性费用如何在 7 月消化</p>
+      ${renderStackedArea()}
+    </div>
+
+    <div class="card col-6 reveal">
+      <h3 class="card-title">异常数量月度趋势</h3>
+      <p class="card-sub">15 条规则每月扫出的违规条数 · 当前 ${monthLabel} ${anomalyCount} 条</p>
+      ${renderAnomalyBars()}
+    </div>
+
+    <div class="card col-6 reveal">
+      <h3 class="card-title">凭证完整率（${monthLabel}）</h3>
+      <p class="card-sub">5 件凭证齐全率 · ${compPct >= 90 ? '✅ 达标' : compPct >= 60 ? '⚠️ 改进中' : '🔴 需改善'}</p>
+      <div class="chart-wrap">${renderRing(compPct, 180, monthLabel)}</div>
+    </div>
+
+    <div class="card col-6 reveal">
+      <h3 class="card-title">${monthLabel}费用类别占比</h3>
+      <p class="card-sub">hover 查看详细金额</p>
+      ${renderPie(pieData)}
+    </div>
+
+    <div class="card col-6 reveal">
+      <h3 class="card-title">审批流转漏斗（${monthLabel}）</h3>
+      <p class="card-sub">从提交到结算的转化率 ${(m.settled / m.submitted * 100).toFixed(0)}%</p>
+      <div id="funnel-wrap">${renderFunnel(funnelData)}</div>
+    </div>
+
+    <div class="card col-6 reveal">
+      <h3 class="card-title">异常预警（${monthLabel}）</h3>
+      <p class="card-sub">${mi === 5 ? '实时扫描当前数据' : '历史快照'} · ${anomalies.length} 条记录</p>
+      ${anomalies.map(a => `
+        <div class="anomaly-item">
+          <div class="anomaly-dot ${a.level}"></div>
+          <div class="anomaly-time">${a.time}</div>
+          <div class="anomaly-text"><span class="anomaly-code">${a.code}</span> ${a.text}</div>
+        </div>`).join('') || '<p class="muted" style="text-align:center;padding:30px 0;">✅ 该月无异常</p>'}
+    </div>
+
+    <div class="card col-6 reveal">
+      <h3 class="card-title">供应商健康度（${monthLabel}）</h3>
+      <p class="card-sub">${DB.supplier.name} · 5 维评估 · 雷达随月份演进</p>
+      ${renderRadar(radarAxes, radarValues)}
+    </div>
+
+    ${renderSupplierComparison()}
+
+    <div class="card col-6 reveal">
+      <h3 class="card-title">审批漏斗月度对比</h3>
+      <p class="card-sub">每月 PR 提交 → 结算的转化</p>
+      <div style="font-size:13px;">
+        ${HISTORY.funnelByMonth.map((mm, i) => `
+          <div style="display:flex;justify-content:space-between;padding:8px 10px;border-bottom:1px solid var(--border);border-radius:6px;cursor:pointer;${i===mi?'background:var(--brand-soft);font-weight:600;':''}" onclick="selectMonth(${i})">
+            <span>${mm.label}</span>
+            <span class="muted">${mm.submitted} 提交 → ${mm.firstPass} 初审 → ${mm.finalPass} 财务 → <b style="color:var(--brand);">${mm.settled} 结算</b></span>
+          </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+
+  // 数字滚动
+  el.querySelectorAll('[data-count]').forEach(node => {
+    animateCount(node, +node.dataset.count, node.dataset.prefix || '', node.dataset.suffix || '', +(node.dataset.decimals || 0));
+  });
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    el.querySelectorAll('circle[data-target-offset]').forEach(c => {
+      c.style.strokeDashoffset = c.dataset.targetOffset;
+    });
+    el.querySelectorAll('.funnel-bar').forEach(b => b.style.width = b.dataset.width + '%');
+  }));
+  observeReveals();
+}
+
+function renderAdminTimesheet() {
+  const el = document.getElementById('admin-content');
+  const pending = DB.attendances.filter(a => a.hctConfirm === 'PENDING');
+  el.innerHTML = `
+  <div class="card">
+    <h3 class="card-title">工时确认（HCT 现场人员）</h3>
+    <p class="card-sub">待确认 ${pending.length} 条 —— 未打卡记录必须填原因 + HCT 确认才计入结算</p>
+    <table>
+      <thead><tr><th>司机</th><th>日期</th><th>时间</th><th>照片</th><th>未打卡原因</th><th>操作</th></tr></thead>
+      <tbody>${DB.attendances.map(a => {
+        const d = DB.drivers.find(x => x.id === a.driverId);
+        return `<tr>
+          <td>${d?.name}</td>
+          <td class="mono">${a.date}</td>
+          <td class="mono">${a.start} - ${a.end}</td>
+          <td>${a.photoIn ? '📷' : '<span class="text-bad">❌ 缺失</span>'}</td>
+          <td>${a.noClockReason ? `<span class="muted">${a.noClockReason}</span>` : '-'}</td>
+          <td>
+            ${a.hctConfirm === 'PENDING' ? `
+              <button class="btn-ok btn-sm" onclick="confirmAtt(${a.id}, 'CONFIRMED')">✅ 确认</button>
+              <button class="btn-bad btn-sm" onclick="confirmAtt(${a.id}, 'REJECTED')">❌ 驳回</button>
+            ` : (a.hctConfirm === 'CONFIRMED' ? '<span class="badge badge-passed">已确认</span>' : '<span class="badge badge-rejected">已驳回</span>')}
+          </td>
+        </tr>`;}).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function confirmAtt(id, action) {
+  const a = DB.attendances.find(x => x.id === id);
+  a.hctConfirm = action;
+  a.hctConfirmer = '张工';
+  a.hctConfirmTime = new Date().toISOString();
+  save(); toast(action === 'CONFIRMED' ? '已确认' : '已驳回'); render();
+}
+
+function renderAdminExpense() {
+  const el = document.getElementById('admin-content');
+  el.innerHTML = `
+  <div class="card">
+    <h3 class="card-title">费用审核（HCT 项目经理 / 财务）</h3>
+    <table>
+      <thead><tr><th>类型</th><th>金额</th><th>人民币</th><th>凭证</th><th>合规</th><th>操作</th></tr></thead>
+      <tbody>${DB.expenses.map(e => `
+        <tr>
+          <td>${e.subCategory}</td>
+          <td class="mono">${e.foreignAmount ? e.foreignAmount + ' ' + e.currency : '-'}</td>
+          <td class="mono">¥ ${fmtMoney(e.actualAmount)}</td>
+          <td>${e.evidences.length ? e.evidences.map(ev => `<span class="ev-thumb">${ev.slice(0,3)}</span>`).join('') : '<span class="text-bad">无</span>'}</td>
+          <td>${complianceBadge(e.complianceStatus)}</td>
+          <td>
+            ${e.status === 'pending' ? `
+              <button class="btn-ok btn-sm" onclick="auditExpense(${e.id}, 'passed')">✅ 通过</button>
+              <button class="btn-bad btn-sm" onclick="auditExpense(${e.id}, 'rejected')">❌ 驳回</button>
+            ` : badge(e.status)}
+          </td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function auditExpense(id, action) {
+  const e = DB.expenses.find(x => x.id === id);
+  if (action === 'rejected') {
+    const c = prompt('驳回原因：'); if (!c) return;
+    e.rejectComment = c;
+  }
+  e.status = action;
+  save(); toast(action === 'passed' ? '✅ 已通过' : '❌ 已驳回'); render();
+}
+
+function renderAdminPR() {
+  const el = document.getElementById('admin-content');
+  const NODES = ['HCT 现场确认', 'HCT 项目经理', 'HCT 财务'];
+  el.innerHTML = `
+  <div class="card">
+    <h3 class="card-title">PR 三级审批</h3>
+    ${DB.prs.map(p => `
+      <div class="card" style="background:var(--bg);">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div class="mono" style="font-weight:700;">${p.code}</div>
+            <div class="muted">${p.settlementMonth} · ¥ ${fmtMoney(p.actualAmount)}</div>
+          </div>
+          <div>${badge(p.status)}</div>
+        </div>
+        <div class="divider"></div>
+        <div class="timeline">
+          ${NODES.map((n, i) => {
+            const rec = p.approvalHistory?.[i];
+            const isCurrent = p.approvalHistory?.length === i && p.status === 'pending';
+            return `
+            <div class="tl-item ${rec ? 'done' : ''}">
+              <div class="tl-title">${n} ${rec ? '✅' : isCurrent ? '⏳ 当前节点' : ''}</div>
+              ${rec ? `<div class="tl-time">${rec.time.slice(0, 16).replace('T', ' ')}</div>` : ''}
+              ${isCurrent ? `
+                <div style="margin-top:6px;">
+                  <button class="btn-ok btn-sm" onclick="approvePR(${p.id}, '${n}')">✅ 通过</button>
+                  <button class="btn-bad btn-sm" onclick="rejectPR(${p.id}, '${n}')">❌ 驳回</button>
+                </div>` : ''}
+            </div>`;}).join('')}
+        </div>
+      </div>
+    `).join('') || '<p class="muted">暂无待审批 PR</p>'}
+  </div>`;
+}
+
+function approvePR(id, node) {
+  const p = DB.prs.find(x => x.id === id);
+  p.approvalHistory = p.approvalHistory || [];
+  p.approvalHistory.push({ node, action: 'APPROVE', time: new Date().toISOString() });
+  if (p.approvalHistory.length === 3) {
+    p.status = 'passed';
+    p.approvedAt = new Date().toISOString();
+    // 自动生成结算单
+    DB.settlements.push({
+      id: Date.now(), code: 'STL-' + p.code.slice(3),
+      prId: p.id, totalAmount: p.actualAmount, status: 'pending_payment',
+    });
+    toast(`✅ PR ${p.code} 三级审批完成，已生成结算单`);
+  } else toast(`已提交下一级审批`);
+  save(); render();
+}
+
+function rejectPR(id, node) {
+  const c = prompt('驳回原因：'); if (!c) return;
+  const p = DB.prs.find(x => x.id === id);
+  p.status = 'rejected';
+  p.rejectComment = c;
+  p.rejectNode = node;
+  save(); toast('已驳回'); render();
+}
+
+function renderAdminPrompt() {
+  const el = document.getElementById('admin-content');
+  el.innerHTML = `
+  <div class="card">
+    <h3 class="card-title">🤖 AI Prompt 配置</h3>
+    <p class="card-sub">无需改代码，运营就能调整识别规则。改动立即生效。</p>
+    ${DB.aiPrompts.map((p, i) => `
+      <div class="card" style="background:var(--bg);margin-bottom:14px;">
+        <div class="form-grid">
+          <div class="form-row"><label>配置项</label><input value="${p.name}" disabled></div>
+          <div class="form-row"><label>Code</label><input value="${p.code}" disabled class="mono"></div>
+          <div class="form-row"><label>模型</label><input value="${p.model}" onchange="DB.aiPrompts[${i}].model=this.value;save()"></div>
+          <div class="form-row"><label>容差（分钟）</label><input type="number" value="${p.toleranceMinutes}" onchange="DB.aiPrompts[${i}].toleranceMinutes=+this.value;save()"></div>
+        </div>
+        <div class="form-row"><label>System Prompt</label>
+          <textarea rows="3" onchange="DB.aiPrompts[${i}].systemPrompt=this.value;save()">${p.systemPrompt}</textarea></div>
+        <div class="form-row"><label>User Prompt 模板</label>
+          <textarea rows="5" onchange="DB.aiPrompts[${i}].userPromptTemplate=this.value;save()" class="mono">${p.userPromptTemplate}</textarea></div>
+        <div class="form-row">
+          <label><input type="checkbox" ${p.enabled ? 'checked' : ''} onchange="DB.aiPrompts[${i}].enabled=this.checked;save()" style="width:auto;display:inline-block;vertical-align:middle;margin-right:6px;">启用</label>
+        </div>
+      </div>
+    `).join('')}
+    <div class="ai-box">
+      <div class="ai-title">💡 提示</div>
+      <div>模板变量：<span class="mono">{{area}} {{expenseType}} {{currencyOptions}} {{photoType}} {{workDate}} {{registerTime}} {{city}}</span></div>
+      <div class="muted" style="margin-top:6px;">改动会立即影响下一次 AI 识别，所有变更都会记录操作日志。</div>
+    </div>
+  </div>`;
+}
+
+// ============ 启动 ============
+render();
+
+// ============ 右下角手写签名 ============
+(function signature() {
+  // 动态加载 Google Fonts 手写体 Caveat
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap';
+  document.head.appendChild(link);
+
+  const el = document.createElement('div');
+  el.className = 'signature';
+  el.textContent = 'xinyu';
+  document.body.appendChild(el);
+})();
+</script>
+</body>
+</html>
