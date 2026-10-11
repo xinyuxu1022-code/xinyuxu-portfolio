@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>徐鑫宇 | 个人作品集</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --bg-white: #ffffff;
+            --bg-gray: #fbfbfd;
+            --bg-light-blue: #eef7fb;
+            --bg-light-purple: #edf8fa;
+            --bg-light-pink: #eaf7f8;
+            --bg-dark: #123746;
+            --accent: #1685c2;
+            --accent-gradient: linear-gradient(135deg, #167ab5 0%, #39b6c5 100%);
+            --accent-hover: #096fa8;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: var(--text-primary);
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 44px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 40px;
+        }
+
+        nav a {
+            color: #f5f5f7;
+            text-decoration: none;
+            font-size: 12px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        nav a:hover {
+            opacity: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(180deg, #ffffff 0%, #edf7fb 100%);
+            padding-top: 44px;
+        }
+
+        .hero-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center 18%;
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 28px;
+            transform: translateY(8px);
+            box-shadow: 0 20px 60px rgba(37, 132, 184, 0.22);
+            border: 4px solid white;
+        }
+
+        .hero h1 {
+            font-size: 96px;
+            font-weight: 700;
+            letter-spacing: -0.015em;
+            margin-bottom: 10px;
+            background: linear-gradient(120deg, #167ab5 0%, #249fc0 55%, #58c5c5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
+            animation: gradientShift 5s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero .subtitle {
+            font-size: 28px;
+            color: #6e6e73;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .hero .tagline {
+            font-size: 21px;
+            color: #1685a8;
+            max-width: 600px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .hero .summary {
+            font-size: 17px;
+            color: #5c6970;
+            max-width: 720px;
+            margin-bottom: 32px;
+            line-height: 1.7;
+        }
+
+        .hero .cta {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 980px;
+            text-decoration: none;
+            font-size: 17px;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-secondary:hover {
+            text-decoration: underline;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 100px 20px;
+        }
+
+        .section-dark {
+            background: linear-gradient(135deg, #e8f4f9 0%, #edf8fa 100%);
+            color: var(--text-primary);
+        }
+
+        .section-gray {
+            background: linear-gradient(180deg, #eef7fb 0%, #f0f8f9 100%);
+        }
+
+        .section-title {
+            font-size: 56px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: -0.005em;
+        }
+
+        .section-subtitle {
+            font-size: 21px;
+            color: var(--text-secondary);
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 60px;
+        }
+
+        .section-dark .section-subtitle {
+            color: #86868b;
+        }
+
+        /* Experience Cards */
+        .experience-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            gap: 40px;
+        }
+
+        .experience-card {
+            background: var(--bg-white);
+            border-radius: 30px;
+            padding: 60px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 40px rgba(37, 132, 184, 0.09);
+        }
+
+        .experience-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 60px rgba(37, 132, 184, 0.16);
+        }
+
+        .experience-card.dark {
+            background: linear-gradient(135deg, #167ab5 0%, #39aebd 100%);
+            color: white;
+        }
+
+        .company-name {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .company-role {
+            font-size: 21px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .experience-card.dark .company-role {
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+        .achievement-list {
+            list-style: none;
+            text-align: left;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .achievement-list li {
+            font-size: 17px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .achievement-list li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 20px;
+        }
+
+        .highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .experience-card.dark .highlight {
+            color: #bdeef1;
+        }
+
+        /* Education */
+        .education-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .edu-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(37, 132, 184, 0.12);
+            transition: transform 0.3s;
+        }
+
+        .edu-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .edu-school {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .edu-degree {
+            font-size: 17px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .edu-date {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .edu-honor {
+            font-size: 14px;
+            color: var(--accent);
+        }
+
+        /* Skills */
+        .skills-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .skill-card {
+            background: #e7f3f8;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            color: var(--text-primary);
+            box-shadow: 0 10px 30px rgba(37, 132, 184, 0.10);
+            transition: transform 0.3s;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .skill-card:nth-child(2) {
+            background: #e7f5f6;
+        }
+
+        .skill-card:nth-child(3) {
+            background: #eaf3f8;
+        }
+
+        .skill-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .skill-title {
+            font-size: 21px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .skill-items {
+            font-size: 14px;
+            color: #5f6b72;
+            line-height: 1.8;
+        }
+
+        /* Projects */
+        .project-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(37, 132, 184, 0.09);
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-card:nth-child(2) {
+            background: linear-gradient(135deg, #eef7fb 0%, #eaf7f8 100%);
+        }
+
+        .project-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .project-type {
+            font-size: 14px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .project-desc {
+            font-size: 17px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Contact */
+        .contact-section {
+            text-align: center;
+            padding: 100px 20px;
+            background: linear-gradient(180deg, #eaf7f8 0%, #eef7fb 100%);
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 40px;
+        }
+
+        .contact-item {
+            font-size: 21px;
+        }
+
+        .contact-item a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
+        .portfolio-dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .portfolio-dashboard-preview {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #fbfbfd;
+            box-shadow: 0 10px 40px rgba(37, 132, 184, 0.16);
+            cursor: pointer;
+        }
+
+        .portfolio-dashboard-preview:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 4px;
+        }
+
+        .portfolio-dashboard-preview iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 182%;
+            height: 760px;
+            border: 0;
+            transform: scale(.55);
+            transform-origin: top left;
+            pointer-events: none;
+        }
+
+        .portfolio-dashboard-overlay {
+            position: absolute;
+            inset: auto 0 0;
+            padding: 42px 24px 20px;
+            color: #fff;
+            background: linear-gradient(transparent, rgba(21, 24, 34, .88));
+        }
+
+        .portfolio-dashboard-overlay strong {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .portfolio-dashboard-overlay span {
+            font-size: 13px;
+            opacity: .88;
+        }
+
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s, transform 0.8s;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .portfolio-dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 48px;
+            }
+
+            .hero .subtitle {
+                font-size: 21px;
+            }
+
+            .section-title {
+                font-size: 36px;
+            }
+
+            .education-grid,
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-container {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                gap: 20px;
+            }
+
+            .experience-card {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#home">首页</a></li>
+            <li><a href="#experience">经历</a></li>
+            <li><a href="#portfolio">作品集</a></li>
+            <li><a href="#education">教育</a></li>
+            <li><a href="#projects">项目</a></li>
+            <li><a href="#skills">技能</a></li>
+            <li><a href="#contact">联系</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <img src="photo.png" alt="徐鑫宇" class="hero-photo">
+        <h1>徐鑫宇</h1>
+        <p class="subtitle">上海大学（211）硕士 · 27届</p>
+        <p class="tagline">全球化运营 × 数据驱动 × 跨文化管理</p>
+        <p class="summary">关注供应链运营、数据中台与项目落地，擅长从业务痛点出发搭建监控机制、推进跨区域协同，并用数据驱动运营效率提升与风险控制。</p>
+        <div class="cta">
+            <a href="#experience" class="btn-primary">查看作品</a>
+            <a href="#contact" class="btn-secondary">联系我 →</a>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="section-gray" id="experience">
+        <h2 class="section-title fade-in">实习经历</h2>
+        <p class="section-subtitle fade-in">从业务运营到数据中台，持续构建全链路协同与效率优化能力</p>
+
+        <div class="experience-grid">
+            <!-- 智驾新程 -->
+            <div class="experience-card fade-in">
+                <div class="company-name">智驾新程</div>
+                <div class="company-role">地平线 &amp; Aumovio · 研发-数据采集运营 · 2025.10-2026.4, 2026.7-至今</div>
+                <ul class="achievement-list">
+                    <li><span class="highlight">全球多区域供应商全生命周期管理：</span>负责全球多区域供应商的选拔、准入及日常考评，构建标准化管理看板。主导150+项细分特采任务，泛化里程共计交付<span class="highlight">25万公里（其中海外8万公里）</span>，数据合格率98%，月度完成率120%。</li>
+                    <li><span class="highlight">海外供应商培训与跨文化赋能：</span>针对全球多家供应商建立双维度培训体系，<span class="highlight">主持全英文周会</span>，指导外籍司机进行复杂场景实操，完成跨境试采验证及数据传输。</li>
+                    <li><span class="highlight">全球数采运营与数字化监控：</span>利用飞书工具进行全球车辆上链管理与高优区域路线规划，<span class="highlight">自主搭建欧盟数采数字化看板</span>，多维度监控全球各区域行车/泊车进度。</li>
+                    <li><span class="highlight">跨国数据流转与交付闭环：</span>建立包括云端传输等多模式数据回流链路，协同完成数据入库、质检及入湖，利用飞书一站式工作台实现全流程数字化追踪。</li>
+                    <li><span class="highlight">成本与风险管理：</span>独立负责各区域供应商月度结算，主导PR（采购申请）与GR（收货确认）流程，通过精细化管理确保项目成本控制与合规性。</li>
+                </ul>
+            </div>
+
+            <!-- 理想汽车 -->
+            <div class="experience-card dark fade-in">
+                <div class="company-name">理想汽车</div>
+                <div class="company-role">数据中台-数据运营 · 2026.4-2026.7</div>
+                <ul class="achievement-list">
+                    <li><span class="highlight">全渠道线索全生命周期运营：</span>负责从线上到线下全渠道销售线索的接入、清洗、分发与全生命周期追踪，建立差异化跟进策略与动态转化机制，对全链路转化率负责。</li>
+                    <li><span class="highlight">跨系统协同与数据管理：</span>深度对接DCC、门店、LCC与RB零售中心系统，实现全量通话和用户画像100%结构化全留存，打通线上触判与线下到店的闭环链路，将整体高成效线索的<span class="highlight">转产率提升30%</span>。</li>
+                </ul>
+            </div>
+
+            <!-- 国海证券 -->
+            <div class="experience-card fade-in">
+                <div class="company-name">国海证券</div>
+                <div class="company-role">安徽分公司 · 行研实习 · 2025.6-2025.9</div>
+                <ul class="achievement-list">
+                    <li><span class="highlight">行业数据分析与报告提炼：</span>采集并整理安徽省证券行业运行数据，利用工具进行多维度对标分析，产出3份高质量行业简报。</li>
+                    <li><span class="highlight">企业尽职调查与风险评估：</span>深度参与10+家目标企业尽调，负责财务等多维原始数据采集与核查，独立标注数据存疑信息并撰写调研报告。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section class="section-dark" id="education">
+        <h2 class="section-title fade-in">教育背景</h2>
+        <p class="section-subtitle fade-in">经济学背景 + 数据分析能力 + 风险管理思维</p>
+
+        <div class="education-grid">
+            <div class="edu-card fade-in">
+                <div class="edu-school">上海大学</div>
+                <div class="edu-degree">区域经济学 硕士（211）</div>
+                <div class="edu-date">2024.8 - 2027.3</div>
+                <div class="edu-honor">校一等奖学金（3次，2024-2027每学年均获）</div>
+            </div>
+
+            <div class="edu-card fade-in">
+                <div class="edu-school">成都理工大学</div>
+                <div class="edu-degree">经济学（省一流学科）</div>
+                <div class="edu-date">2020.8 - 2024.6</div>
+                <div class="edu-honor">四川省优秀毕业生<br>校优秀共青团干部（前1%）</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <h2 class="section-title fade-in">项目案例</h2>
+        <p class="section-subtitle fade-in">以业务场景为核心，连接数据治理、流程标准化与运营落地</p>
+
+        <!-- ⭐ 重点展示：跨境对账系统 -->
+        <div style="max-width: 1200px; margin: 0 auto 40px;">
+            <div class="experience-card fade-in" style="background: linear-gradient(135deg, #167ab5 0%, #39b6c5 100%); color: white; cursor: pointer; position: relative; overflow: hidden;" onclick="openSystemDemo()">
+                <div style="position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                    ⭐ 可交互演示
+                </div>
+                <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; text-align: left;">
+                    <div>
+                        <div style="font-size: 14px; opacity: 0.9; margin-bottom: 10px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600;">
+                            自主设计 · 全栈实现 · AI 驱动
+                        </div>
+                        <div class="company-name" style="color: white; margin-bottom: 15px;">跨境运营费用对账系统</div>
+                        <div style="font-size: 18px; opacity: 0.95; margin-bottom: 25px; font-weight: 500;">
+                            让每一笔跨境费用都有据可查
+                        </div>
+                        <ul class="achievement-list" style="font-size: 15px; max-width: 100%;">
+                            <li style="color: rgba(255,255,255,0.95);"><span style="color: #ffd700; font-weight: 600;">15 条业务校验规则引擎</span>：从 PRD 提炼真实痛点，凭证完整率从 11.9% 提升到 94%</li>
+                            <li style="color: rgba(255,255,255,0.95);"><span style="color: #ffd700; font-weight: 600;">多模态 AI 识别</span>：发票 OCR + 打卡照片时间识别，运营可不改代码调整 Prompt</li>
+                            <li style="color: rgba(255,255,255,0.95);"><span style="color: #ffd700; font-weight: 600;">三端分离架构</span>：司机 PWA / 供应商 PC / 总部管理端，权限独立</li>
+                            <li style="color: rgba(255,255,255,0.95);"><span style="color: #ffd700; font-weight: 600;">多币种汇率快照</span>：CNY / EUR / USD / HUF，避免历史数据被改</li>
+                        </ul>
+                        <div style="margin-top: 30px; display: inline-flex; align-items: center; gap: 8px; background: white; color: #167eae; padding: 12px 24px; border-radius: 980px; font-weight: 600; font-size: 15px;">
+                            <span>点击进入完整演示</span>
+                            <span style="font-size: 18px;">→</span>
+                        </div>
+                    </div>
+                    <div style="position: relative;">
+                        <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.2);">
+                            <div style="font-size: 13px; opacity: 0.9; margin-bottom: 12px; font-weight: 600;">📊 系统能力一览</div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 12px;">
+                                <div style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 10px;">
+                                    <div style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">6+</div>
+                                    <div style="opacity: 0.85;">可视化图表</div>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 10px;">
+                                    <div style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">15</div>
+                                    <div style="opacity: 0.85;">校验规则</div>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 10px;">
+                                    <div style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">3</div>
+                                    <div style="opacity: 0.85;">角色端口</div>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 10px;">
+                                    <div style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">4</div>
+                                    <div style="opacity: 0.85;">币种支持</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="project-grid">
+            <div class="project-card fade-in">
+                <div class="project-title">大数据赋能下颠覆性创新与产业组织共生演化研究</div>
+                <div class="project-type">大学生创新创业计划 · 国家级重点项目</div>
+                <div class="project-desc">撰写项目申报书，搭建项目框架，基于大数据赋能背景，从消费者偏好与颠覆性创新行为的互动关系出发，探讨颠覆性创新与产业组织的共生演化过程。</div>
+            </div>
+
+            <div class="project-card fade-in">
+                <div class="project-title">数字经济赋能成渝地区双城经济圈经济高质量发展对策研究</div>
+                <div class="project-type">四川省科技计划软科学项目</div>
+                <div class="project-desc">参与省级软科学项目研究，聚焦数字经济与区域经济发展，运用数据分析方法提出政策建议。</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section class="section-gray" id="portfolio" style="background: linear-gradient(180deg, #eef7fb 0%, #f0f8f9 100%);">
+        <h2 class="section-title fade-in">作品集</h2>
+        <p class="section-subtitle fade-in">实际工作成果展示 · 数据驱动 · 精细化管理 · 全球化运营</p>
+
+        <div style="max-width: 1200px; margin: 0 auto;">
+
+            <!-- 核心数据指标 -->
+            <div class="experience-card fade-in" style="margin-bottom: 40px; background: linear-gradient(135deg, #167ab5 0%, #39aebd 100%); color: white;">
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; font-weight: 700;">25万<span style="font-size: 24px;">KM</span></div>
+                        <div style="font-size: 16px; opacity: 0.9;">海外采集里程</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; font-weight: 700;">350+<span style="font-size: 24px;">条</span></div>
+                        <div style="font-size: 16px; opacity: 0.9;">路线规划下发</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; font-weight: 700;">505<span style="font-size: 24px;">块</span></div>
+                        <div style="font-size: 16px; opacity: 0.9;">硬盘物料管理</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 48px; font-weight: 700;">21<span style="font-size: 24px;">份</span></div>
+                        <div style="font-size: 16px; opacity: 0.9;">SOP/手册文档</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 四大核心能力模块 -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px;">
+
+                <!-- 模块1：全球供应商管理 -->
+                <div class="experience-card fade-in">
+                    <div class="company-name" style="font-size: 24px;">🌍 全球供应商管理</div>
+                    <div class="company-role">智驾新程（地平线子公司）· 2025.10-至今</div>
+                    <ul class="achievement-list" style="font-size: 15px;">
+                        <li>完成 <span class="highlight">4家</span> 海外供应商培训，输出 <span class="highlight">30+份</span> 监控管理文档</li>
+                        <li>参与 <span class="highlight">10+场次</span> 供应商能力评估会议</li>
+                        <li>建立"车辆-国家-日期"命名规范，路线共计下发 <span class="highlight">350+条</span></li>
+                        <li>整理SOP手册，实现供应商管理标准化</li>
+                    </ul>
+                </div>
+
+                <!-- 模块2：成本管控与财务分析 -->
+                <div class="experience-card fade-in" style="background: linear-gradient(135deg, #258eae 0%, #35b7b0 100%); color: white;">
+                    <div class="company-name" style="font-size: 24px;">💰 成本管控与财务分析</div>
+                    <div class="company-role" style="color: rgba(255,255,255,0.9);">精细化管理 · 合同执行差异分析 · 成本优化</div>
+                    <ul class="achievement-list" style="font-size: 15px;">
+                        <li>主导 <span class="highlight">5家</span> 供应商月度结算，完成PR/GR全流程</li>
+                        <li>清晰掌握每家供应商成本结构：车辆租赁/人员/管理/数据传输</li>
+                        <li>通过结算理解合同条款与实际执行差异，提出优化建议</li>
+                        <li>统计"每公里总费用"，形成月度成本对比分析</li>
+                        <li>精细化管理 <span class="highlight">505块</span> 硬盘物料全流程（出库→台账→归属→寄出）</li>
+                    </ul>
+                </div>
+
+                <!-- 模块3：数据运营与看板搭建 -->
+                <div class="experience-card fade-in">
+                    <div class="company-name" style="font-size: 24px;"> 数据运营与看板搭建</div>
+                    <div class="company-role">自主搭建 · 实时监控 · 数据驱动决策</div>
+                    <ul class="achievement-list" style="font-size: 15px;">
+                        <li>自主搭建 <span class="highlight">欧盟数采数字化看板</span>，多维度监控全球进度</li>
+                        <li>海外已采集 <span class="highlight">25万KM</span>，已交付 <span class="highlight">20万KM</span></li>
+                        <li>按T+15追踪数据回传进度，delay时定位原因并同步风险</li>
+                        <li>数据上传后进行脏算子分析，及时规范司机采集动作</li>
+                        <li>数据合格率 <span class="highlight">98%</span>，月度完成率 <span class="highlight">120%</span></li>
+                    </ul>
+                </div>
+
+                <!-- 模块4：流程规范化 -->
+                <div class="experience-card fade-in" style="background: linear-gradient(135deg, #4699c5 0%, #50bcc5 100%); color: white;">
+                    <div class="company-name" style="font-size: 24px;">📋 流程规范化</div>
+                    <div class="company-role" style="color: rgba(255,255,255,0.9);">标准化 · 文档输出 · 知识沉淀</div>
+                    <ul class="achievement-list" style="font-size: 15px;">
+                        <li>撰写并修改海外SOR输出 <span class="highlight">8份</span></li>
+                        <li>海外数采培训手册及运维手册 <span class="highlight">3份</span></li>
+                        <li>完成海外调研资料报告、周报输出共计 <span class="highlight">20+份</span></li>
+                        <li>国内数采流程SOP <span class="highlight">10+份</span>（流程/成本/司机管理/需求评审）</li>
+                        <li>实现从需求承接→运营执行→结算交付的全链路标准化</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 工作成果时间线 -->
+            <div class="experience-card fade-in" style="margin-bottom: 40px;">
+                <div class="company-name" style="font-size: 28px; margin-bottom: 30px;">📈 成长轨迹</div>
+                <div style="position: relative; padding: 20px 0;">
+                    <!-- 时间线 -->
+                    <div style="position: absolute; top: 50%; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #167ab5 0%, #249fc0 50%, #58c5c5 100%); transform: translateY(-50%); border-radius: 2px;"></div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; position: relative;">
+                        <!-- 阶段1：国内数采 -->
+                        <div style="text-align: center; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(37,132,184,0.12);">
+                            <div style="font-size: 14px; color: #167ab5; font-weight: 600; margin-bottom: 10px;">2025.10 - 2026.4</div>
+                            <div style="font-size: 18px; font-weight: 700; margin-bottom: 15px;">国内数采</div>
+                            <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                                • 完成 <b>244个</b> 特采需求<br>
+                                • <b>18万+</b> 个tag<br>
+                                • <b>7.5万+</b> KM任务量<br>
+                                • 输出 <b>10+份</b> SOP
+                            </div>
+                        </div>
+
+                        <!-- 阶段2：理想汽车 -->
+                        <div style="text-align: center; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(118,75,162,0.15);">
+                            <div style="font-size: 14px; color: #168aa5; font-weight: 600; margin-bottom: 10px;">2026.4 - 2026.7</div>
+                            <div style="font-size: 18px; font-weight: 700; margin-bottom: 15px;">理想汽车</div>
+                            <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                                • 数据中台运营<br>
+                                • 全渠道线索追踪<br>
+                                • 转产率提升 <b>30%</b><br>
+                                • 跨系统协同打通
+                            </div>
+                        </div>
+
+                        <!-- 阶段3：海外数采 -->
+                        <div style="text-align: center; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(53,174,189,0.12);">
+                            <div style="font-size: 14px; color: #168f99; font-weight: 600; margin-bottom: 10px;">2026.7 - 至今</div>
+                            <div style="font-size: 18px; font-weight: 700; margin-bottom: 15px;">海外数采</div>
+                            <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                                • 采集 <b>25万</b> KM<br>
+                                • <b>350+</b> 条路线<br>
+                                • <b>5家</b> 供应商结算<br>
+                                • 自主搭建看板
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 看板展示区（多图对比） -->
+            <div class="experience-card fade-in">
+                <div class="company-name" style="font-size: 28px; margin-bottom: 10px;">📱 看板作品展示</div>
+                <div class="company-role" style="margin-bottom: 30px;">点击任意看板查看完整大图</div>
+
+                <div class="portfolio-dashboard-grid">
+                    <!-- 看板1：欧盟数采数字化看板 -->
+                    <div style="position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(37, 132, 184, 0.16); cursor: pointer;" onclick="openModal('dashboard.png')">
+                        <img src="dashboard.png" alt="欧盟数采数字化看板" style="width: 100%; height: auto; display: block;">
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(22,122,181,0.9)); padding: 25px; color: white;">
+                            <div style="font-size: 18px; font-weight: 600;">欧盟数采数字化看板</div>
+                            <div style="font-size: 13px; opacity: 0.9; margin-top: 5px;">2026海外专项数据采集 · 月度交付进度 · 供应商绩效</div>
+                        </div>
+                    </div>
+
+                    <!-- 看板2：跨境运营费用对账系统 -->
+                    <div class="portfolio-dashboard-preview" role="button" tabindex="0"
+                         aria-label="打开跨境运营费用对账系统交互演示"
+                         onclick="openSystemDemo()"
+                         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSystemDemo();}">
+                        <iframe src="../对账系统.html?preview=admin" title="跨境运营费用对账系统管理看板预览" loading="lazy"></iframe>
+                        <div class="portfolio-dashboard-overlay">
+                            <strong>跨境运营费用对账系统</strong>
+                            <span>5 家供应商 · 6 个月费用对比 · 点击进入交互演示 ↗</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; padding: 20px; background: var(--bg-gray); border-radius: 15px; text-align: center;">
+                    <div style="font-size: 15px; color: var(--text-secondary);">
+                        💡 看板实现了从 <b>数据采集→质量监控→成本结算→交付追踪</b> 的全链路数字化管理，
+                        支撑全球多区域并行运营的资源最优分配决策。
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Modal for Full Dashboard -->
+    <div id="dashboardModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; overflow: auto; cursor: pointer;" onclick="closeModal()">
+        <div style="position: relative; max-width: 90%; margin: 50px auto;">
+            <button style="position: fixed; top: 20px; right: 30px; background: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 24px; cursor: pointer; z-index: 10001;" onclick="closeModal()">×</button>
+            <img id="modalImage" src="dashboard.png" alt="完整看板" style="width: 100%; height: auto; border-radius: 10px;">
+        </div>
+    </div>
+
+    <!-- Modal for 对账系统 Demo -->
+    <div id="systemModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fbfbfd; z-index: 10000;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 50px; background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 1px solid rgba(0,0,0,0.05); z-index: 10001;">
+            <div style="display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 15px;">
+                <div style="width: 24px; height: 24px; border-radius: 6px; background: linear-gradient(135deg, #167ab5, #39b6c5); display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 900;">对</div>
+                <span>跨境运营费用对账系统 · 完整交互演示</span>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <a href="../对账系统.html?preview=admin" target="_blank" style="font-size: 13px; color: #167eae; text-decoration: none; padding: 6px 14px; border: 1px solid #167eae; border-radius: 980px;">新窗口打开 ↗</a>
+                <button onclick="closeSystemModal()" style="background: #1d1d1f; color: white; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;">×</button>
+            </div>
+        </div>
+        <iframe src="../对账系统.html?preview=admin" title="跨境运营费用对账系统完整演示" style="position: absolute; top: 50px; left: 0; width: 100%; height: calc(100% - 50px); border: none;"></iframe>
+    </div>
+
+    <!-- Skills Section -->
+    <section class="section-dark" id="skills">
+        <h2 class="section-title fade-in">技能与证书</h2>
+        <p class="section-subtitle fade-in">数据分析 · 全球化运营 · 风险管理</p>
+
+        <div class="skills-container">
+            <div class="skill-card fade-in">
+                <div class="skill-icon">📊</div>
+                <div class="skill-title">数据分析</div>
+                <div class="skill-items">Python · R · Stata<br>SPSS · Matlab · ArcGIS<br>Excel · SQL</div>
+            </div>
+
+            <div class="skill-card fade-in">
+                <div class="skill-icon">🌍</div>
+                <div class="skill-title">语言能力</div>
+                <div class="skill-items">CET-6<br>大学生英语竞赛优秀奖<br>校英语演讲比赛一等奖<br>全英文会议主持经验</div>
+            </div>
+
+            <div class="skill-card fade-in">
+                <div class="skill-icon">🏆</div>
+                <div class="skill-title">证书荣誉</div>
+                <div class="skill-items">FRM一级<br>四川省优秀毕业生<br>校一等奖学金（2次）<br>"互联网+"省级银奖</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section-gray contact-section" id="contact">
+        <h2 class="section-title fade-in">联系我</h2>
+        <p class="section-subtitle fade-in">期待与您交流，共同探索全球化运营与数据驱动的无限可能</p>
+
+        <div class="contact-info fade-in">
+            <div class="contact-item">
+                 <a href="tel:15026722864">15026722864</a>
+            </div>
+            <div class="contact-item">
+                ✉️ <a href="mailto:xinyuxu1022@outlook.com">xinyuxu1022@outlook.com</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: linear-gradient(135deg, #167ab5 0%, #39aebd 100%); color: white; text-align: center; padding: 30px; font-size: 12px;">
+        <p>© 2026 徐鑫宇 · 上海大学 · 27届校招</p>
+    </footer>
+
+    <script>
+        // Scroll Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Modal Functions
+        function openModal(imageSrc) {
+            document.getElementById('modalImage').src = imageSrc;
+            document.getElementById('dashboardModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('dashboardModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 对账系统 Modal
+        function openSystemDemo() {
+            document.getElementById('systemModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSystemModal() {
+            document.getElementById('systemModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeSystemModal();
+            }
+        });
+    </script>
+</body>
+</html>
